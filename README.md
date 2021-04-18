@@ -9,6 +9,9 @@ Here are some technical requirments that you must have to run the app successful
 2. Nodejs  v14.15.1
 3. Command line interface (Git v2.29.2)
 4. Docker platform
+5. Java SE Development Kit 8u271
+6. Android Studio platform
+7. Genymotion emulation flatform or a real android phone.
 ## Installation
 #### To sure that everything is clear, I give you some tips to prepare all prerequistes as good as possible.
 1. YARN package manager and Nodejs:
@@ -18,6 +21,13 @@ Here are some technical requirments that you must have to run the app successful
   > To install Git CLI, you will visit [Git Pages](https://git-scm.com/downloads). Then, you download with suitable operating system and install it.
 3. Docker platform:
   > For the Docker, you can visit [Docker Page](https://docs.docker.com/get-docker) to get the instructions for each operating system.
+4.  Java jdk 8:
+  > Here is which website you need to visit and download a suitable installer to install it. [Java JDK Website](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
+5. Android Studio:
+  > Before anything, you must sure that you have installed Java SE Development Kit successfully.
+  > Here is the download page of this software [Android Studio Website](https://developer.android.com/studio). 
+6. Genymotion (optional):
+  > This is an option because you can use a real device or a device supported by Android Studio. I only give you the main page of [The Genymotion](https://www.genymotion.com/).
  ## How to run
  #### After preparing prerequisites completely, I show you steps to run my app on your workplace. 
  ###### Server-side
@@ -35,5 +45,9 @@ Here are some technical requirments that you must have to run the app successful
   ```
   yarn start
   ```
-  - Finally, you go to [the link](http://localhost:3000) to load the application.
-
+  - Finally, you go to [the link](http://localhost:3000) to load the application. 
+ ###### The mobile application
+  - Firstly, you open the Android Studio editor.
+  - Secondly, you open the folder named app_version_android in the editor.
+  - Then, you open the Genymotion and operate a virtual android device or use Android Studio's virtual devices or use a real android device.
+  - Finally, you click on the Start button to set up the application.
