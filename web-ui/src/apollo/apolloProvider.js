@@ -13,8 +13,8 @@ import { offsetLimitPagination } from "@apollo/client/utilities";
 // get the authentication token from local storage if it exists
 const user = JSON.parse(localStorage.getItem("user"));
 const httpLink = createUploadLink({
-  uri: "https://app-apigateway.herokuapp.com/graphql",
-  // uri: "http://localhost:7000/graphql",
+  // uri: "https://app-apigateway.herokuapp.com/graphql",
+  uri: "http://localhost:7000/graphql",
 });
 // const uploadLink = createUploadLink({
 //   uri: "http://localhost:7000/graphql",
@@ -32,8 +32,8 @@ const authLink = setContext((_, { headers }) => {
 
 //For realtime websocket
 const wsLink = new WebSocketLink({
-  uri: "wss://app-apigateway.herokuapp.com/graphql",
-  // uri: "ws://localhost:7000/graphql",
+  // uri: "wss://app-apigateway.herokuapp.com/graphql",
+  uri: "ws://localhost:7000/graphql",
   options: {
     reconnect: true,
     connectionParams: {
