@@ -1,0 +1,10 @@
+.admin_session_container {
+  & .card_header {
+    text-align: center;
+  }
+
+  & .main_chart {
+    height: 300px;
+    margin-top: 40px;
+  }
+}

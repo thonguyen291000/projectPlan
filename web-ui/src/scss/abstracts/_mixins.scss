@@ -1,0 +1,138 @@
+@mixin h1 {
+  font-size: 2em;
+}
+
+@mixin h2 {
+  font-size: 1.5em;
+}
+
+@mixin h3 {
+  font-size: 1.17em;
+}
+
+@mixin h4 {
+  font-size: 1em;
+}
+
+@mixin h5 {
+  font-size: 0.83em;
+}
+
+@mixin middleHeadline {
+  font-family: "Public Sans", sans-serif;
+  font-size: 28px;
+  line-height: 40px;
+  letter-spacing: -1px;
+  color: #444;
+}
+
+@mixin largeHeadline {
+  font-family: "Public Sans", sans-serif;
+  font-size: 48px;
+  line-height: 40px;
+  letter-spacing: -1px;
+  color: #444;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  font-weight: 100;
+}
+
+@mixin normalText {
+  font-family: "Public Sans", sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #444;
+}
+
+@mixin icon10 {
+  vertical-align: middle;
+  height: 10px;
+  width: 10px;
+}
+
+@mixin icon14 {
+  vertical-align: middle;
+  height: 14px;
+  width: 14px;
+}
+
+@mixin icon20 {
+  vertical-align: middle;
+  height: 20px;
+  width: 20px;
+}
+
+@mixin icon24 {
+  vertical-align: middle;
+  height: 24px;
+  width: 24px;
+}
+
+@mixin icon30 {
+  vertical-align: middle;
+  height: 30px;
+  width: 30px;
+}
+
+@mixin icon35 {
+  vertical-align: middle;
+  height: 35px;
+  width: 35px;
+}
+
+@mixin ellipsis {
+  white-space: nowrap;
+  overflow: scroll;
+  text-overflow: ellipsis;
+}
+
+@mixin avatar {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+}
+
+@mixin avatar_xs {
+  height: 2.2rem;
+  width: 2.2rem;
+}
+
+@mixin center_item_flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin show {
+  display: block;
+}
+
+@mixin hideScrollBar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@mixin button {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+@mixin boxShadow {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+@mixin copyright {
+  @include h4;
+}

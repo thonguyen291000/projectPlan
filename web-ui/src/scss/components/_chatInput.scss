@@ -1,0 +1,217 @@
+.chat_input_container {
+  padding: 1.5rem;
+  margin-bottom: 0;
+  border-top: 1px solid $solitude;
+
+  & .reply_message_container{
+    display: flex;
+    justify-content: space-between;
+    width: 40%;
+    box-shadow: inset 0px 0px 20px 10px rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding: 0 5px;
+
+    & > .message {
+
+    }
+
+    & > .close {
+      display: flex;
+      align-items: center;
+
+      & > img {
+        width: 24px
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  & > form {
+    & .form_wrapper {
+      margin-right: 0;
+      margin-left: 0;
+      display: flex;
+      flex: 1 0 100%;
+      flex-wrap: wrap;
+      align-items: center;
+
+      & .input_container {
+        padding-right: 0;
+        padding-left: 0;
+        flex-basis: 0;
+        flex-grow: 1;
+        max-width: 100%;
+
+        & > div {
+          & > input {
+            border-color: $hawkes_blue;
+            background-color: $hawkes_blue;
+
+            height: calc(1.5em + 1rem + 6px);
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            border-radius: 0.4rem;
+            overflow: visible;
+
+            display: block;
+            width: 100%;
+            font-weight: 400;
+            color: $trout;
+            background-clip: padding-box;
+            border: 1px solid $hawkes_blue;
+            transition: border-color 0.15s ease-in-out,
+              box-shadow 0.15s ease-in-out;
+
+            &:focus {
+              outline: none;
+            }
+          }
+        }
+      }
+
+      & .icons {
+        padding-right: 0;
+        padding-left: 0;
+        flex: 0 0 auto;
+        width: auto;
+        max-width: 100%;
+
+        & .icons_wrapper {
+          margin-left: 0.5rem;
+
+          & > ul {
+            margin-bottom: 0;
+            padding-left: 0;
+            list-style: none;
+            margin-top: 0;
+
+            & > li {
+              display: inline-block;
+
+              &:not(:last-child) {
+                margin: 0;
+              }
+
+              & .emoji {
+                display: inline-flex;
+                vertical-align: middle;
+                list-style: none;
+                padding: 0.5rem 1rem;
+
+                & > button {
+                  border-top-right-radius: 0;
+                  border-bottom-right-radius: 0;
+                  flex: 1 1 auto;
+                  border: none;
+                  background-color: transparent;
+
+                  &:hover {
+                    cursor: pointer;
+                  }
+
+                  &:active {
+                    opacity: 0.5;
+                  }
+
+                  &:focus {
+                    outline: none;
+                  }
+
+                  & .smile_icon {
+                    @include icon20;
+                  }
+                }
+
+                & .emoji_dropdown {
+                  display: none;
+                  right: 0 !important;
+                  left: auto !important;
+                  max-width: 0 !important;
+                  top: auto;
+                  bottom: 100%;
+                  margin-top: 0;
+                  margin-bottom: 0.125rem;
+                }
+
+                & .show_emoji {
+                  @include show;
+                }
+              }
+
+              & > label {
+                margin-bottom: 0;
+                padding: 0.5rem 1rem;
+                line-height: 1.5;
+                border-radius: 0.4rem;
+                text-decoration: none;
+
+                &:hover {
+                  cursor: pointer;
+                }
+
+                &:active {
+                  opacity: 0.5;
+                }
+
+                & .attach_icon {
+                  @include icon20;
+                }
+
+                & .image_icon {
+                  @include icon20;
+                }
+
+                & .file_input {
+                  display: none;
+                  width: 100%;
+                  overflow: visible;
+                }
+              }
+
+              & > .btn_send {
+                margin-bottom: 0;
+                padding: 0.5rem 1rem;
+                line-height: 1.5;
+                border-radius: 0.4rem;
+                text-decoration: none;
+                background-color: $primary_color;
+                border-color: $primary_color;
+                border: none;
+
+                &:hover {
+                  cursor: pointer;
+                }
+
+                &:active {
+                  opacity: 0.5;
+                }
+
+                &:focus {
+                  outline: none;
+                }
+
+                & > img {
+                  @include icon20;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  & > .typing {
+    margin-top: 0.5rem;
+
+    & > h6 {
+      margin-left: 1rem;
+      font-weight: 400;
+    }
+  }
+}

@@ -1,0 +1,1 @@
+exports.USER_SESSION_EXPIRY_HOURS = 2;

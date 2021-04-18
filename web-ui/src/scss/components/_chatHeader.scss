@@ -1,0 +1,148 @@
+.header_session {
+  padding: 1.5rem;
+  border-bottom: 1px solid $solitude;
+
+  & > div {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -12px;
+    margin-right: -12px;
+    & .group_avatar {
+      max-width: 70%;
+      position: relative;
+      padding-right: 12px;
+      padding-left: 12px;
+
+      & .wrapper {
+        align-items: center;
+        display: flex;
+
+        & .back {
+          margin-right: 0.5rem;
+          display: none;
+
+          & > a {
+            padding: 0.5rem 0.5rem 0.5rem 0;
+            outline: none;
+            text-decoration: none;
+
+            & > img {
+              @include icon20;
+            }
+
+            &:hover {
+              cursor: pointer;
+            }
+          }
+        }
+
+        & .avatar {
+          margin-right: 1rem;
+
+          & img {
+            @include avatar_xs;
+            border-radius: 50%;
+            border-style: none;
+          }
+        }
+
+        & .name {
+          overflow: scroll;
+          flex: 1 1;
+          & > h5 {
+            font-size: 16px;
+            @include ellipsis;
+            margin-bottom: 0;
+            color: $trout;
+            font-weight: bold;
+
+            & > a {
+              color: inherit;
+              outline: none;
+              text-decoration: none;
+              background-color: transparent;
+            }
+
+            & > img {
+              @include icon10;
+              margin-left: 10px;
+            }
+          }
+        }
+      }
+
+      & .event_wrapper {
+        display: flex;
+        margin-top: 10px;
+        align-items: center;
+
+        & img {
+          width: 30px;
+        }
+
+        & .event_content {
+          font-size: smaller;
+          font-style: italic;
+        }
+      }
+    }
+
+    & .action {
+      padding-right: 12px;
+      padding-left: 12px;
+      position: absolute;
+      right: 0;
+
+      & > ul {
+        text-align: right;
+        padding-left: 0;
+        list-style: none;
+        margin-top: 0;
+        display: flex;
+        justify-content: flex-end;
+
+        & > li {
+          & > button {
+            @include button;
+            height: 40px;
+            width: 40px;
+            line-height: 40px;
+            box-shadow: none;
+            padding: 0;
+            font-size: 20px;
+            outline: none;
+            text-transform: none;
+            overflow: visible;
+            background-color: transparent;
+
+            &:hover {
+              cursor: pointer;
+            }
+
+            &:active {
+              opacity: 0.6;
+            }
+
+            & img {
+              @include icon20;
+            }
+
+            & > .status_icon {
+              width: 10px;
+              height: 10px;
+            }
+          }
+          &:not(:last-child) {
+            margin-right: 0.5rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 990px) {
+  .header_session > div > .group_avatar .back {
+    display: block !important;
+  }
+}

@@ -1,0 +1,276 @@
+.tab_content {
+  & .user_session {
+    text-align: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid $solitude;
+
+    &_image_settings {
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+
+      & img {
+        height: 6rem;
+        width: 6rem;
+        border-radius: 50%;
+
+        padding: 0.25rem;
+        background-color: $ghost_white;
+        border: 1px solid $solitude;
+      }
+
+      & .btn_edit_user_avatar {
+        @include button;
+        @include avatar_xs;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        background-color: $hawkes_blue;
+        border-color: $hawkes_blue;
+        outline: none;
+        text-transform: none;
+        border-radius: 50%;
+        & .edit_icon {
+          @include icon14;
+          padding: 0;
+        }
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        &:active {
+          opacity: 0.6;
+        }
+      }
+    }
+
+    &_name {
+      @include h3;
+      overflow: scroll;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 0.25rem !important;
+      font-weight: bold;
+      color: $trout;
+    }
+
+    &_status {
+      & .status_wrapper {
+        color: $text_muted;
+        padding-bottom: 0.25rem !important;
+        outline: none;
+        text-decoration: none;
+        background-color: transparent;
+
+        & .status_dropdown_open {
+          vertical-align: middle;
+          width: 10px;
+          height: 10px;
+          margin-left: 8px;
+        }
+      }
+
+      & .dropdown_status {
+        box-shadow: 0 2px 4px rgba(15, 34, 58, 12%);
+        animation-name: DropDownSlideSettings;
+        animation-duration: 0.3s;
+        animation-fill-mode: both;
+        margin: 0;
+
+        position: absolute;
+        z-index: 1000;
+        display: none;
+        float: left;
+
+        padding: 0.5rem 0;
+        font-size: 0.9375rem;
+        color: #495057;
+        text-align: left;
+        list-style: none;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid $solitude;
+        border-radius: 0.25rem;
+
+        & .item {
+          display: block;
+          width: 100%;
+          padding: 0.35rem 1.5rem;
+          clear: both;
+          font-weight: 400;
+          color: $cinder;
+          text-align: inherit;
+          white-space: nowrap;
+          background-color: transparent;
+          border: 0;
+          outline: none;
+
+          &:not(:disabled) {
+            cursor: pointer;
+          }
+
+          &:hover {
+            color: $text_muted;
+          }
+        }
+      }
+
+      & .show_dropdown {
+        @include show;
+      }
+    }
+  }
+
+  & .settings_content {
+    height: calc(100vh - 300px);
+    padding: 1.5rem;
+
+    & .description {
+      color: $text_muted;
+
+      & p {
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    & .accordion {
+      & .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid #f5f7fb;
+        border-radius: 0.25rem;
+        margin-bottom: 0.5rem;
+        box-shadow: none;
+        & a {
+          text-decoration: none;
+          & > div {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 0;
+            background-color: $ghost_white;
+            border-bottom: 0 solid $ghost_white;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: $trout;
+            font-family: "Public Sans", sans-serif;
+            font-weight: 600;
+
+            & .open_close_icon {
+              @include icon14;
+              float: right;
+            }
+          }
+        }
+
+        & .collapse {
+          overflow: scroll; // Hide the element content, while height = 0
+          height: 0;
+          opacity: 0;
+          transition: height 0ms 400ms, opacity 400ms 0ms;
+          & .card_body {
+            flex: 1 1 auto;
+            min-height: 1px;
+            padding: 1.25rem;
+
+            & .float_right {
+              float: right !important;
+
+              & .btn_edit_name {
+                @include button;
+                padding: 0.25rem 0.5rem;
+                font-size: 0.82031rem;
+                line-height: 1.5;
+                border-radius: 0.2rem;
+                color: $cinder;
+                background-color: $hawkes_blue;
+                border-color: $hawkes_blue;
+                outline: none;
+                text-transform: none;
+                overflow: visible;
+
+                & .icon_edit_name {
+                  @include icon14;
+                  margin-right: 0.25rem;
+                }
+
+                &:hover {
+                  cursor: pointer;
+                }
+
+                &:active {
+                  opacity: 0.6;
+                }
+              }
+            }
+
+            & div {
+              margin-top: 1.5rem;
+
+              & p {
+                color: $text_muted;
+                margin-bottom: 0.35rem;
+              }
+
+              & h5 {
+                font-weight: bold;
+              }
+
+              & input {
+                font-weight: bold;
+                border: none;
+
+                &:focus {
+                  outline: none;
+                }
+              }
+
+              & .session {
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+
+                & h5 {
+                  font-size: 13px;
+                  margin-bottom: 0;
+                  color: $text_muted;
+                  font-weight: bold;
+
+                  & a {
+                    color: $text_muted;
+                    outline: none;
+                    text-decoration: none;
+                  }
+                }
+              }
+
+              & .border_top {
+                border-top: 1px solid $solitude;
+              }
+
+              &:nth-child(1),
+              &:nth-child(2) {
+                margin-top: 0 !important;
+              }
+            }
+          }
+        }
+
+        & .show {
+          height: auto;
+          opacity: 1;
+          transition: height 0ms 0ms, opacity 600ms 0ms;
+        }
+      }
+    }
+  }
+}
+
+.term_condition {
+  height: 500px;
+  overflow-y: scroll;
+}

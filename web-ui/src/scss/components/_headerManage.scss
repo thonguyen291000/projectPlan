@@ -1,0 +1,26 @@
+.header_manage_container {
+  z-index: 799 !important;
+
+  & .text_welcome > h4 {
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    margin-bottom: 0 !important;
+  }
+
+  & .modal_profile_container {
+      & .column_avatar_label {
+        align-self: center !important;
+      }
+
+      & .column_avatar {
+        display: flex !important;
+        justify-content: flex-start !important;
+
+        & > img {
+            width: 100px !important;
+            border: 1px solid black !important;
+        }
+      }
+  }
+}

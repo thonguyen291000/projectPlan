@@ -1,0 +1,212 @@
+.tab_content {
+  & .chat {
+    margin-bottom: 1.5rem;
+  }
+
+  & .tab_content_header {
+    padding: 1.5rem 1.5rem 0 1.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & .float_right_dropdown {
+      & .dropdown {
+        position: relative;
+
+        & a {
+          & > img {
+            @include icon20;
+            opacity: .7;
+          }
+          
+        }
+      }
+    }
+
+    & h4 {
+      @include middleHeadline;
+    }
+  }
+
+  & .user_session {
+    text-align: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid $solitude;
+
+    &_image {
+      margin-bottom: 1.5rem;
+
+      & img {
+        height: 6rem;
+        width: 6rem;
+        border-radius: 50%;
+
+        padding: 0.25rem;
+        background-color: $ghost_white;
+        border: 1px solid $solitude;
+      }
+    }
+
+    &_name {
+      @include h3;
+      overflow: auto !important;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 0.25rem !important;
+      font-weight: bold;
+      color: $trout;
+    }
+
+    &_state {
+      color: $text_muted;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 0.35rem;
+
+      & > img {
+        @include icon14;
+        margin-right: 0.25rem;
+      }
+    }
+  }
+
+  & .profile_content {
+    height: calc(100vh - 300px);
+    padding: 1.5rem;
+
+    & .description {
+      color: $text_muted;
+
+      & p {
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    & .accordion {
+      & .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid #f5f7fb;
+        border-radius: 0.25rem;
+        margin-bottom: 0.5rem;
+        box-shadow: none;
+        & a {
+          text-decoration: none;
+          & > div {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 0;
+            background-color: $ghost_white;
+            border-bottom: 0 solid $ghost_white;
+
+            display: flex;
+            justify-content:space-between;
+            align-items:center;
+            color: $trout;
+            font-family: "Public Sans", sans-serif;
+            font-weight: 600;
+
+            & .about_icon {
+              vertical-align: middle;
+              height: 16px;
+              width: 22px;
+              margin-top: -4px;
+              margin-right: 5px;
+            }
+
+            & .attachment {
+              @include icon14;
+              margin-top: -4px;
+              margin-right: 5px;
+            }
+
+            & .open_close_icon {
+              @include icon14;
+              float: right;
+            }
+          }
+        }
+
+        & .collapse {
+          height: 0;
+          opacity: 0;
+          transition: height 0ms 400ms, opacity 400ms 0ms;
+          & .card_body {
+            flex: 1 1 auto;
+            min-height: 1px;
+            padding: 1.25rem;
+
+            & .loading_overlay_container {
+              margin-bottom: 18px;
+            }
+
+            & div {
+              margin-top: 1.5rem;
+
+              & p {
+                color: $text_muted;
+                margin-bottom: 0.35rem;
+              }
+
+              & h5 {
+                @include normalText;
+                font-weight: bold;
+              }
+
+              & .card_content {
+                display: flex;
+                align-items: center;
+                margin-top: -2.5rem;
+                margin-bottom: 1rem;
+                & .file_image_video_icon {
+                  height: 3rem;
+                  width: 3rem;
+                  margin-right: 1rem;
+                  @include center_item_flex;
+                  & img {
+                    @include icon30;
+                  }
+                }
+
+                & .content {
+                  flex: 1 1;
+                  margin-top: 0.5rem;
+
+                  & h5 {
+                    @include normalText;
+                    @include ellipsis;
+                    max-width: 10rem;
+                  }
+
+                  & p {
+                    font-size: 13px;
+                  }
+                }
+
+                & .action {
+                  & img {
+                    @include icon14;
+                  }
+                }
+              }
+            }
+
+            & div:first-child {
+              margin-top: 0;
+            }
+          }
+        }
+
+        & .show {
+          height: auto;
+          opacity: 1;
+          transition: height 0ms 0ms, opacity 600ms 0ms;
+        }
+      }
+    }
+  }
+}

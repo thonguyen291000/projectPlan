@@ -1,0 +1,20 @@
+.staff_session_container {
+  & .card_header {
+    display: flex;
+    justify-content: space-between;
+
+    & > div {
+      align-self: center;
+
+      & > h5 {
+        margin-bottom: 0;
+        font-weight: bold;
+      }
+    }
+
+    & input {
+      visibility: hidden;
+      position: absolute;
+    }
+  }
+}

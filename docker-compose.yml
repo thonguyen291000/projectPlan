@@ -1,0 +1,26 @@
+version: "3"
+services:
+ api-gateway:
+  build: ./api-gateway
+  depends_on: 
+    - chat-service
+    - users-service
+  volumes:
+    - ./api-gateway:/opt/app
+  ports:
+    - "7000:7000"
+  env_file: .env
+ users-service:
+  build: ./users-service
+  volumes: 
+    - ./users-service:/opt/app
+  env_file: .env
+  ports:
+    - "7002:7002"
+ chat-service:
+  build: ./chat-service
+  volumes: 
+    - ./chat-service:/opt/app
+  env_file: .env
+  ports:
+    - "7001:7001"
