@@ -48,6 +48,6 @@ Here are some technical requirments that you must have to run the app successful
   - Finally, you go to [the link](http://localhost:3000) to load the application. 
  ###### The mobile application
   - Firstly, you open the Android Studio editor.
-  - Secondly, you open the folder named app_version_android in the editor.
+  - Secondly, you open the folder named app_version_mobile in the editor.
   - Then, you open the Genymotion and operate a virtual android device or use Android Studio's virtual devices or use a real android device.
   - Finally, you click on the Start button to set up the application.
