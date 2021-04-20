@@ -1,12 +1,13 @@
 .chat_container {
   width: 100vw;
   min-height: 370px;
+  min-width: 320px;
   display: grid;
   grid-template-columns: 3fr 9fr;
   background-color: $ghost_white;
 
   & .chat_info_container {
-    min-width: 450px;
+    min-width: 320px;
     // min-height: 100%;
     display: grid;
     grid-template-columns: 2fr 10fr;
@@ -122,7 +123,7 @@
         overflow: hidden;
         background-color: #fff;
         display: none;
-        min-width: 380px;
+        min-width: 320px;
       }
     }
   }

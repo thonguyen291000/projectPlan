@@ -94,6 +94,7 @@ const ChatDropDown = ({
   const searchData = useSelector((state) => state.data.searchData);
   const deletedRoom = useSelector((state) => state.data.deletedRoom);
   const updateListRoom = useSelector((state) => state.data.updateListRoom);
+  const closeChatMobile = useSelector((state) => state.data.closeChatMobile);
   //Variables
   const [collapse, setCollapse] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -133,6 +134,18 @@ const ChatDropDown = ({
   // }, []);
 
   //Methods
+  useEffect(() => {
+    if (closeChatMobile) {
+      const optionRoomElements = document.getElementsByName("option_room");
+
+      for (var i = 0; i < optionRoomElements.length; i++) {
+        optionRoomElements[i].style.backgroundColor = "#f7f7ff";
+      }
+
+      localStorage.setItem("selectedRoom", null);
+    }
+  }, [closeChatMobile]);
+
   const handleSelectedGroup = (group, updateSeenRoom) => {
     const optionRoomElements = document.getElementsByName("option_room");
 

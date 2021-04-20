@@ -23,7 +23,8 @@ import {
   SET_CLASS_SHOW_COLLAPSE,
   SET_MORE_ROOMS,
   SET_REPLY_TO_MESSAGE,
-  UPDATE_LIST_ROOM
+  UPDATE_LIST_ROOM,
+  SET_CLOSE_CHAT_MOBILE
 } from "../types";
 
 export const setLoading = (state) => (dispatch) => {
@@ -205,3 +206,10 @@ export const setUpdateListRoom = (data) => (dispatch) => {
     payload: data
   })
 }
+
+export const setCloseChatMobile = (data) => (dispatch) => {
+  dispatch({
+    type: SET_CLOSE_CHAT_MOBILE,
+    payload: data,
+  });
+};

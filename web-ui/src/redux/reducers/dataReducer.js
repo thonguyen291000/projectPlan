@@ -24,6 +24,7 @@ import {
   SET_MORE_ROOMS,
   SET_REPLY_TO_MESSAGE,
   UPDATE_LIST_ROOM,
+  SET_CLOSE_CHAT_MOBILE,
 } from "../types";
 
 var initialState = {
@@ -180,6 +181,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         updateListRoom: action.payload,
+      };
+    case SET_CLOSE_CHAT_MOBILE:
+      return {
+        ...state,
+        closeChatMobile: action.payload,
       };
     default:
       return state;

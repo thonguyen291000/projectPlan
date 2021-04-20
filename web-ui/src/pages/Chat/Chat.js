@@ -22,6 +22,7 @@ import {
   setMoreMessages,
   setDeletedRoom,
   setUpdateListRoom,
+  setCloseChatMobile,
 } from "../../redux/actions/dataAction";
 //Apollo
 import { gql, useQuery, useSubscription } from "@apollo/client";
@@ -523,6 +524,8 @@ const Chat = () => {
     const chatContent = document.getElementById("affect");
 
     chatContent.className = chatContent.className + " show_chat";
+
+    dispatch(setCloseChatMobile());
   };
 
   const closeChatContent = () => {
@@ -530,6 +533,8 @@ const Chat = () => {
       const chatContent = document.getElementById("affect");
 
       chatContent.className = chatContent.className.slice(0, 23);
+
+      dispatch(setCloseChatMobile(true));
     } catch (error) {}
   };
 
