@@ -1,9 +1,0 @@
-{
-  "appId": "io.ionic.nameofyourapp",
-  "appName": "chat_greenwich",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "build",
-  "cordova": {},
-  "linuxAndroidStudioPath": "/snap/android-studio/100/android-studio/bin/studio.sh"
-}
