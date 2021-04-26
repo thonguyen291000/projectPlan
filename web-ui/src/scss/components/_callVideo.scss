@@ -1,18 +1,52 @@
 .video_container {
   padding: 10px;
 
-  .class_name {
+  & .class_name {
     @include middleHeadline;
     padding: 10px 0;
     text-align: center;
     font-weight: bold;
   }
 
-  .amount {
+  & .amount {
     font-size: 16px;
     font-weight: bold;
     padding-bottom: 10px;
     text-align: center;
+  }
+
+  & .stop_call {
+    display: flex;
+    justify-content: center;
+
+    & > button {
+      background-color: red;
+      border: none;
+      color: white;
+      padding: 10px 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      cursor: pointer;
+      float: left;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      font-weight: bold;
+
+      &:hover {
+        background-color: #a50e0e;
+      }
+
+      &:active {
+        outline: none;
+        opacity: .5;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
   }
 
   #video-grid {
@@ -38,12 +72,12 @@
 }
 
 @media only screen and (max-width: 1700px) {
-    .video_container {
-      #video-grid {
-        grid-template-columns: 33.33% 33.33% 33.33%;
-      }
+  .video_container {
+    #video-grid {
+      grid-template-columns: 33.33% 33.33% 33.33%;
     }
   }
+}
 
 @media only screen and (max-width: 1400px) {
   .video_container {
@@ -54,10 +88,9 @@
 }
 
 @media only screen and (max-width: 900px) {
-    .video_container {
-      #video-grid {
-        grid-template-columns: 100%;
-      }
+  .video_container {
+    #video-grid {
+      grid-template-columns: 100%;
     }
   }
-  
+}

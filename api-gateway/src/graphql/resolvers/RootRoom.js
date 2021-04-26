@@ -3,7 +3,7 @@ import ChatService from "../../adapters/chatService";
 
 const RootRoom = {
   rooms: async (rootRoom) => {
-    return await ChatService.getRoomsByName({ names: rootRoom.rooms });
+    return await ChatService.getRoomsByName({ names: rootRoom.rooms, rootRoom: rootRoom.name });
   },
   class: async (rootRoom) => {
     return await UsersService.getClassByName({ name: rootRoom.class });

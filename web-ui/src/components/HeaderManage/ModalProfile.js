@@ -228,7 +228,7 @@ const ModalProfile = ({ modal, setModal }) => {
           </CCol>
         </CRow>
 
-        <CRow>
+        <CRow className="row_avatar">
           <CCol xs="8" className="column_avatar_label">
             <CFormGroup>
               <CLabel htmlFor="avatar">Upload avatar</CLabel>

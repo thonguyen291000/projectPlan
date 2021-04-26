@@ -53,7 +53,7 @@ const ChatItem = ({ item, newRoomNameData, numberGroup }) => {
 
       flagForNotiEvent += 1;
     }
-  }, [item]);
+  }, [item?.event]);
 
   const checkStatus = () => {
     switch (item.status) {
@@ -217,7 +217,7 @@ const ChatItem = ({ item, newRoomNameData, numberGroup }) => {
           {checkStatus()}
         </div>
         <div className="body">
-          <h5 className="user_name">{item.name}</h5>
+          <h5 className="user_name">{item.name.split("|")[0]}</h5>
           {checkTypeMessage()}
         </div>
         <div className="time">

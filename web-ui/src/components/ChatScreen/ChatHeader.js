@@ -76,7 +76,7 @@ const ChatHeader = ({ openSlidebar, closeChatContent, roomDetails }) => {
                 <div className="name">
                   <h5>
                     <a href="#" onClick={openSlidebar}>
-                      {roomDetails.name}
+                      {roomDetails.name.split("|")[0]}
                     </a>
                     <img src={online} className="status_icon" />
                   </h5>

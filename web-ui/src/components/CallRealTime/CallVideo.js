@@ -55,7 +55,7 @@ const CREATE_MESSAGE = gql`
   }
 `;
 
-const peers = {};
+var peers = {};
 var numberUser = [];
 
 const myVideo = document.createElement("video");
@@ -84,9 +84,10 @@ const CallVideo = ({ roomName, close, type }) => {
           const roomIsCalling = callVideoState.filter(
             (item) => item.room === roomName
           );
-          console.log(callVideoState);
+
           //Check whether that user is operating the call video
           if (roomIsCalling.length === 0 || !roomIsCalling[0].callState) {
+            console.log("whether grid");
             createMessage({
               variables: {
                 room: roomName,
@@ -96,6 +97,7 @@ const CallVideo = ({ roomName, close, type }) => {
             dispatch(setUpdateListRoom(true));
           }
         } else {
+          console.log("operating grid");
           createMessage({
             variables: {
               room: roomName,
@@ -120,9 +122,10 @@ const CallVideo = ({ roomName, close, type }) => {
     onSubscriptionData(data) {
       console.log("user join room", data);
       if (stream) {
-        console.log(1);
+        const id = data.subscriptionData.data.joinRoom.userId;
+
         // localStorage.setItem("lastUser", true);
-        connectToNewUser(data.subscriptionData.data.joinRoom.userId, stream);
+        connectToNewUser(id, stream);
       }
     },
   });
@@ -133,7 +136,7 @@ const CallVideo = ({ roomName, close, type }) => {
         const userId = data.subscriptionData.data.outRoom.userId;
         console.log("User out room", userId);
 
-        numberUser = numberUser.filter((item) => item !== userId);
+        numberUser.shift();
 
         if (peers[userId]) peers[userId].close();
         calUsersJoin();
@@ -150,27 +153,31 @@ const CallVideo = ({ roomName, close, type }) => {
   useEffect(() => {
     dispatch(setLoading(createMessageProps.loading));
   }, [createMessageProps.loading]);
-
+  console.log(numberUser);
   useEffect(() => {
     var peer = new Peer();
     setMyPeer(peer);
 
-    dispatch(setUpdateListRoom())
+    peers = {};
+    numberUser = [];
+
+    dispatch(setUpdateListRoom());
 
     return () => {
       try {
         const userId = localStorage.getItem("userId");
         // const lastUser = localStorage.getItem("lastUser");
 
-        if (numberUser.length === 1 || numberUser.length === 0) {
-          // localStorage.setItem("lastUser", true);
-          numberUser = [];
-        } else {
-          numberUser = numberUser.filter((item) => item !== userId);
-        }
+        // if (numberUser.length === 1 || numberUser.length === 0) {
+        //   // localStorage.setItem("lastUser", true);
+        //   numberUser = [];
+        // } else {
+        //   numberUser = numberUser.filter((item) => item !== userId);
+        // }
 
         //If no video in grid
-        if (numberUser.length === 1 || numberUser.length === 0) {
+        if (numberUser.length === 0 || numberUser.length === 1) {
+          console.log("No grid");
           createMessage({
             variables: {
               room: roomName,
@@ -240,11 +247,14 @@ const CallVideo = ({ roomName, close, type }) => {
             call.answer(newStream);
             const video = document.createElement("video");
             video.id = call.peer;
+
             call.on("stream", (userVideoStream) => {
               console.log("on stream on call", userVideoStream);
-              console.log(3);
               // localStorage.setItem("lastUser", false);
               addVideoStream(video, userVideoStream);
+              if (numberUser.indexOf(userVideoStream.id) === -1) {
+                numberUser.push(userVideoStream.id);
+              }
               calUsersJoin();
             });
           });
@@ -260,9 +270,11 @@ const CallVideo = ({ roomName, close, type }) => {
     const video = document.createElement("video");
     video.id = userId;
     call.on("stream", (userVideoStream) => {
-      console.log("on stream call");
+      console.log("on stream call", userVideoStream);
       addVideoStream(video, userVideoStream);
-      console.log(4);
+      if (numberUser.indexOf(userVideoStream.id) === -1) {
+        numberUser.push(userVideoStream.id);
+      }
       // localStorage.setItem("lastUser", false);
       calUsersJoin();
     });
@@ -272,7 +284,6 @@ const CallVideo = ({ roomName, close, type }) => {
     });
 
     peers[userId] = call;
-    numberUser.push(userId);
   };
 
   const addVideoStream = (video, stream) => {
@@ -300,8 +311,11 @@ const CallVideo = ({ roomName, close, type }) => {
 
   return (
     <div className="video_container">
-      <div className="class_name">{roomName}</div>
+      <div className="class_name">{roomName.split("|")[0]}</div>
       <div className="amount">{numberOfUser} Joined</div>
+      <div className="stop_call">
+        <button onClick={() => close()}>Stop call</button>
+      </div>
       <div id="video-grid"></div>
     </div>
   );

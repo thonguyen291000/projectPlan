@@ -3,17 +3,16 @@
   margin-bottom: 0;
   border-top: 1px solid $solitude;
 
-  & .reply_message_container{
+  & .reply_message_container {
     display: flex;
     justify-content: space-between;
     width: 40%;
-    box-shadow: inset 0px 0px 20px 10px rgba(0,0,0,0.1);
+    box-shadow: inset 0px 0px 20px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
     border-radius: 10px;
     padding: 0 5px;
 
     & > .message {
-
     }
 
     & > .close {
@@ -21,7 +20,7 @@
       align-items: center;
 
       & > img {
-        width: 24px
+        width: 24px;
       }
 
       &:hover {
@@ -212,6 +211,25 @@
     & > h6 {
       margin-left: 1rem;
       font-weight: 400;
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .chat_input_container {
+    & > form {
+      & .form_wrapper {
+        display: block;
+        
+        & .input_container {
+          margin-bottom: 5px;
+        }
+
+        & .icons {
+          display: flex;
+          justify-content: flex-end;
+        }
+      }
     }
   }
 }

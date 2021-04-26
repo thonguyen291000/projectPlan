@@ -8,7 +8,7 @@ const updateRoomResolver = async (
   context
 ) => {
   if (!context.user) throw new Error(UNAUTHENTICATED);
-  console.log(event)
+
   const newRoom = await ChatService.updateRoom({
     room,
     name,

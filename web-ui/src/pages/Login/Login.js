@@ -95,7 +95,7 @@ const Login = () => {
   return (
     <div className="login_container">
       <div className="content_container">
-        <img className="school_icon" src={schoolIcon} />
+        <img className="school_icon" src={schoolIcon} width="100%"/>
         <span className="school_name">Academic Portal</span>
         <div className="email_container">
           <span className="login_label">Sign in</span>

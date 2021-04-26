@@ -173,7 +173,7 @@ const ChatDropDown = ({
         },
       });
 
-      if (group.message && group.message.length > 0) {
+      if (group.messages && group.messages.length > 0) {
         for (var i = 0; i < group.messages.length; i++) {
           if (group.messages[i].usersSeenMessage?.indexOf(email) === -1) {
             if (group.messages[i].usersSeenMessage.length === 0) {
@@ -264,19 +264,32 @@ const ChatDropDown = ({
   }, [newGroups]);
 
   useEffect(() => {
+    if (!newGroups) {
+      if (groups.length < 4 && groups.length >= 0) {
+        setHideViewMore(true);
+      } else {
+        setHideViewMore(false);
+      }
+    }
+  }, [groups]);
+
+  useEffect(() => {
     if (deletedRoom) handleSelectedGroup();
   }, [deletedRoom]);
 
   useEffect(() => {
-    const currentRoom = JSON.parse(localStorage.getItem("selectedRoom"));
-    if (updateListRoom && (newRoomNameData || currentRoom)) {
-      console.log("run");
-      handleSelectedGroup(
-        newRoomNameData ? null : currentRoom,
-        newRoomNameData ? true : false
-      );
+    try {
+      const currentRoom = JSON.parse(localStorage.getItem("selectedRoom"));
+      if (updateListRoom && (newRoomNameData || currentRoom)) {
+        handleSelectedGroup(
+          newRoomNameData ? null : currentRoom,
+          newRoomNameData ? true : false
+        );
 
-      dispatch(setUpdateListRoom());
+        dispatch(setUpdateListRoom());
+      }
+    } catch (err) {
+      console.log(err);
     }
   }, [updateListRoom]);
 

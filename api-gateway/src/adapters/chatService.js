@@ -49,9 +49,20 @@ export default class ChatService {
   static async getRoomsByName({ names, rootRoom, limit }) {
     var results = ["test"];
     var result;
-    for (var i = 0; i < limit; i++) {
-      result = await got.get(`${CHAT_SERVICE_URL}/room/${names[i]}/${rootRoom}`).json();
-      results.push(result);
+    if (limit) {
+      for (var i = 0; i < limit; i++) {
+        result = await got
+          .get(`${CHAT_SERVICE_URL}/room/${names[i]}/${rootRoom}`)
+          .json();
+        results.push(result);
+      }
+    } else {
+      for (var i = 0; i < names.length; i++) {
+        result = await got
+          .get(`${CHAT_SERVICE_URL}/room/${names[i]}/${rootRoom}`)
+          .json();
+        results.push(result);
+      }
     }
     results.shift();
     return results;
@@ -136,7 +147,7 @@ export default class ChatService {
     url,
     mimetype,
     size,
-    replyToMessage
+    replyToMessage,
   }) {
     const result = await got
       .post(`${CHAT_SERVICE_URL}/message`, {
@@ -150,7 +161,7 @@ export default class ChatService {
           url,
           mimetype,
           size,
-          replyToMessage
+          replyToMessage,
         },
       })
       .json();
@@ -186,17 +197,39 @@ export default class ChatService {
     return result;
   }
 
+  static async getMessagesByIdOneTime({ messageIds }) {
+    
+    var result = await got
+      .get(`${CHAT_SERVICE_URL}/messages/id/${messageIds}`)
+      .json();
+
+    return result;
+  }
+
   static async getMessagesById({ messageIds, limit }) {
     var results = [];
 
-    for (let index = 0; index < limit; index++) {
-      const messageId = messageIds[index];
-      var result = await got
-        .get(`${CHAT_SERVICE_URL}/message/${messageId}`)
-        .json();
+    if (limit) {
+      for (let index = 0; index < limit; index++) {
+        const messageId = messageIds[index];
+        var result = await got
+          .get(`${CHAT_SERVICE_URL}/message/${messageId}`)
+          .json();
 
-      if (result) {
-        results.push(result);
+        if (result) {
+          results.push(result);
+        }
+      }
+    } else {
+      for (let index = 0; index < messageIds.length; index++) {
+        const messageId = messageIds[index];
+        var result = await got
+          .get(`${CHAT_SERVICE_URL}/message/${messageId}`)
+          .json();
+
+        if (result) {
+          results.push(result);
+        }
       }
     }
 
@@ -216,7 +249,7 @@ export default class ChatService {
     url,
     type,
     usersSeenMessage,
-    reacts
+    reacts,
   }) {
     const result = await got
       .patch(`${CHAT_SERVICE_URL}/message`, {
@@ -230,7 +263,7 @@ export default class ChatService {
           url,
           type,
           usersSeenMessage,
-          reacts
+          reacts,
         },
       })
       .json();

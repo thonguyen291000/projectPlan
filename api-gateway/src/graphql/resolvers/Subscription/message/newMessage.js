@@ -1,16 +1,20 @@
 import { withFilter } from "apollo-server";
-import {UNAUTHENTICATED} from "../../../../const/errors"
+import UsersService from "../../../../adapters/usersService";
+import { UNAUTHENTICATED } from "../../../../const/errors";
 
 const newMessageResolver = {
   subscribe: withFilter(
-    (_, __, {pubsub}) => {
+    (_, __, { pubsub }) => {
       return pubsub.asyncIterator(["NEW_MESSAGE"]);
     },
-    ({ newMessage }, _, {user}) => {
-      if(!user) throw new Error(UNAUTHENTICATED);
+    async ({ newMessage }, _, { user }) => {
+      if (!user) throw new Error(UNAUTHENTICATED);
+      
+      const userObj = await UsersService.getUserByEmail({email: user.email});
+      
       if (
         newMessage.user === user.email ||
-        user.rooms.indexOf(newMessage.room) !== -1
+        userObj.rooms.indexOf(newMessage.room) !== -1
       )
         return true;
       return false;

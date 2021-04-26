@@ -15,7 +15,7 @@ const typeDefs = gql`
     createdAt: Date!
     deletedAt: Date!
     updatedAt: Date!
-    rooms: [Room!]
+    rooms: [Room]
     class: Class!
   }
 
@@ -34,6 +34,7 @@ const typeDefs = gql`
     oldName: String
     newestMessage: Message
     event: String
+    newUsersAdded: [String]
   }
 
   type Message {
@@ -280,9 +281,9 @@ const typeDefs = gql`
     updateMessage: Message!
     deleteMessage: Message!
     newUserOnline: [String]
-    newUsersJoinRoom: Room! #new
-    newRoom: Room! #new
-    newWebRTC: WebRTC! #new
+    newUsersJoinRoom: Room!
+    newRoom: Room! 
+    newWebRTC: WebRTC!
     typing: TypingData!
     joinRoom: DataJoinRoom
     outRoom: DataJoinRoom
@@ -291,6 +292,7 @@ const typeDefs = gql`
     userOnline: User!
     userOffline: User!
     updateRoom: Room!
+    newUserAvatar: User!
   }
 `;
 

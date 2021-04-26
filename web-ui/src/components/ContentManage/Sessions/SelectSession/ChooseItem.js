@@ -27,7 +27,7 @@ const ChooseItem = ({
       onClick={handleItemChoose}
       className="list_group_item"
     >
-      {content}
+      {type === "term" ? content.split("-")[1] : content}
       <CBadge className="float-right">
         <CImg
           src={right_arrow}

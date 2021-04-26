@@ -92,6 +92,11 @@ const uploadFileResolver = async (obj, args, context) => {
       password: "",
       avatar: result.Location,
     });
+
+    context.pubsub.publish("NEW_USER_AVATAR", {
+      newUserAvatar: resultUpdate
+    });
+
     if (typeof resultUpdate !== "string") {
       resultUploadDB = true;
     }

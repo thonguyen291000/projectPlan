@@ -164,7 +164,7 @@ const StaffSession = ({ classDetails }) => {
           </CCardHeader>
           <CCardBody>
             <CDataTable
-              items={classDetails.users}
+              items={classDetails.users.filter(user => user.role !== "staff")}
               fields={fields}
               hover
               bordered

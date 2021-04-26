@@ -1,5 +1,7 @@
-exports.createdAt = new Date().toGMTString();
-exports.deletedAt = new Date().toGMTString();
-exports.updatedAt = new Date().toGMTString();
+import moment from "moment";
 
-exports.formatDate = (date) => new Date(date).toGMTString();
+exports.createdAt = new Date().toISOString();
+exports.deletedAt = moment(new Date()).add(4, "months").toISOString();
+exports.updatedAt = new Date().toISOString();
+
+exports.formatDate = (date) => new Date(date).toISOString();

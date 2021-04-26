@@ -15,6 +15,8 @@ import {
   CREATE_ROOM_SUCCESS,
   START_A_NEW_ROOM,
   CREATE_MESSAGE_SUCCESS,
+  STUDENT_NOT_SOCIAL_ROOM,
+  OWNER_IS_NOT_IN_ROOM,
 } from "../../../const/string";
 //Logic
 import { encode } from "../../../funcs/utf8";
@@ -24,6 +26,7 @@ const GET_CLASS = gql`
     class(name: $name) {
       users {
         email
+        role
       }
     }
   }
@@ -80,6 +83,7 @@ const Create = ({ className, closeModal }) => {
   //Redux
   const dispatch = useDispatch();
   const email = useSelector((state) => state.user.info.email);
+  const role = useSelector((state) => state.user.info.role);
   //Variables
   const [listStudents, setListStudents] = useState([]);
   const [newRoom, setNewRoom] = useState();
@@ -119,6 +123,7 @@ const Create = ({ className, closeModal }) => {
       });
 
       closeModal();
+      localStorage.setItem("createRoom", "true");
     },
     onError(err) {
       console.log(err);
@@ -135,8 +140,15 @@ const Create = ({ className, closeModal }) => {
       var arrayEmail = [];
 
       for (var i = 0; i < data.class.users.length; i++) {
-        if (data.class.users[i].email !== email) {
-          arrayEmail.push(data.class.users[i].email);
+        if (
+          data.class.users[i].email !== email &&
+          data.class.users[i].role !== "staff"
+        ) {
+          if (data.class.users[i].role === "teacher") {
+            arrayEmail.push(data.class.users[i].email + " (Teacher)");
+          } else {
+            arrayEmail.push(data.class.users[i].email);
+          }
         }
       }
 
@@ -162,7 +174,7 @@ const Create = ({ className, closeModal }) => {
           rootRoom: className,
           users: newRoom.arrayEmail,
           avatar: urlAvatar,
-          whoCreated: email,
+          whoCreated: newRoom.whoCreated,
         },
       });
     }
@@ -177,6 +189,7 @@ const Create = ({ className, closeModal }) => {
     const new_name = document
       .getElementsByClassName("new_name")[0]
       .value.trim();
+    const owner = document.getElementById("group_owner").value.trim();
 
     if (listStudents && new_name && newRoom?.avatar) {
       const userInGroup = [email];
@@ -189,19 +202,28 @@ const Create = ({ className, closeModal }) => {
           userInGroup.push(arrayUsersInput[i]);
         }
       }
-      setNewRoom({
-        ...newRoom,
-        name: new_name,
-        arrayEmail: userInGroup,
-      });
-      //Upload avatar
-      uploadFile({
-        variables: {
-          file: newRoom.avatar,
-          idOrEmail: newRoom.name,
-          messageOrUser: "",
-        },
-      });
+      if (role === "student" && userInGroup.length > 2) {
+        notifyError(STUDENT_NOT_SOCIAL_ROOM);
+      } else {
+        if (userInGroup.indexOf(owner) !== -1) {
+          setNewRoom({
+            ...newRoom,
+            name: new_name + "|" + className,
+            arrayEmail: userInGroup,
+            whoCreated: owner,
+          });
+          //Upload avatar
+          uploadFile({
+            variables: {
+              file: newRoom.avatar,
+              idOrEmail: newRoom.name,
+              messageOrUser: "",
+            },
+          });
+        } else {
+          notifyError(OWNER_IS_NOT_IN_ROOM);
+        }
+      }
     } else {
       notifyError(FIELD_REQUIRED);
     }
@@ -224,7 +246,7 @@ const Create = ({ className, closeModal }) => {
     <div className="create_container">
       <form
         onKeyPress={(event) => {
-          if(event.key === "Enter") {
+          if (event.key === "Enter") {
             event.preventDefault();
           }
         }}
@@ -236,6 +258,9 @@ const Create = ({ className, closeModal }) => {
             type="text"
             placeholder="Your group name"
             className="new_name"
+            onKeyPress={(e) => {
+              if (e.key === "|") e.preventDefault();
+            }}
           />
         </div>
         <div className="group_members">
@@ -248,6 +273,21 @@ const Create = ({ className, closeModal }) => {
             spacer=""
             id="group_members"
             onKeyPress={handleKeyPressListEmail}
+            maxOptions={listStudents.length}
+          />
+        </div>
+        <div className="group_name">
+          <label htmlFor="group_owner">Owner</label>
+          <input
+            name="group_owner"
+            id="group_owner"
+            type="text"
+            placeholder="Owner email"
+            className="new_name"
+            defaultValue={email}
+            onKeyPress={(e) => {
+              if (e.key === "|") e.preventDefault();
+            }}
           />
         </div>
         <div className="group_avatar">

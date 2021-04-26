@@ -112,22 +112,21 @@ const db_updateRoom = async (req, res, next) => {
     if (req.body.description !== "") {
       room.description = req.body.description;
     }
-    console.log(req.body.event)
+
     if (req.body.event) {
       room.event = req.body.event;
     }
 
-    if (req.body.name !== "") {
+    if (req.body.name !== "" && req.body.name) {
       // Update room in root room
       const rootRoom = await RootRoom.findOne({ name: room.rootRoom });
 
-      for (var i = 0; i < rootRoom.rooms.length; i++) {
-        if (rootRoom.rooms[i].name === room.name) {
-          rootRoom.rooms[i].name = req.body.name;
+      var newRooms = [];
 
-          break;
-        }
-      }
+      newRooms = rootRoom.rooms.filter((room) => room !== req.body.room);
+      newRooms.push(req.body.name);
+      rootRoom.rooms = newRooms;
+
       await rootRoom.save();
 
       // Update room in Message

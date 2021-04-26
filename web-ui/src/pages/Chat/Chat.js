@@ -36,6 +36,7 @@ const GET_ROOM = gql`
       createdAt
       name
       event
+      whoCreated
       rootRoom {
         _id
         name
@@ -111,6 +112,7 @@ const GET_CLASS = gql`
       users {
         _id
         email
+        role
       }
     }
   }
@@ -164,6 +166,15 @@ const NEW_ROOM_AVATAR = gql`
   }
 `;
 
+const NEW_USER_AVATAR = gql`
+  subscription {
+    newUserAvatar {
+      email
+      avatar
+    }
+  }
+`;
+
 const DELETE_MESSAGE_ANNOUNCE = gql`
   subscription {
     deleteMessage {
@@ -179,6 +190,7 @@ const UPDATE_ROOM = gql`
   subscription {
     updateRoom {
       name
+      oldName
       event
     }
   }
@@ -212,7 +224,7 @@ const Chat = () => {
   ] = useState(false);
   const [newRoomName, setNewRoomName] = useState();
   const [newEvent, setNewEvent] = useState();
-
+  const [newUserAvatar, setNewUserAvatar] = useState();
   //Apollo
   var { loading, error, data } = useQuery(GET_ROOM, {
     variables: { name: chosenRoom, limit: 5 },
@@ -225,8 +237,6 @@ const Chat = () => {
   var moreMessageData = useQuery(GET_MORE_MESSAGE, {
     variables: { name: chosenRoom, offset: moreMessages?.offset, limit: 5 },
     skip: moreMessages ? false : true,
-    fetchPolicy: "no-cache",
-    nextFetchPolicy: "no-cache",
     onError(error) {
       notifyError(error.message);
     },
@@ -267,15 +277,15 @@ const Chat = () => {
   useSubscription(UPDATE_ROOM, {
     onSubscriptionData(data) {
       const room = data.subscriptionData.data.updateRoom;
-      if (!room.event) {
-        // setNewRoomName(room.name);
-        // dispatch(setUpdateListRoom());
-        // setTimeout(() => {
-        //   dispatch(setUpdateListRoom(true));
-        //   closeChatContent();
-        //   setCloseChatContentWhenRoomDeleted(true);
-        //   closeSlidebar();
-        // }, 500);
+      if (room.name !== room.oldName) {
+        setNewRoomName(room.name);
+        dispatch(setUpdateListRoom());
+        setTimeout(() => {
+          dispatch(setUpdateListRoom(true));
+          closeChatContent();
+          setCloseChatContentWhenRoomDeleted(true);
+          closeSlidebar();
+        }, 500);
       } else {
         setNewEvent(room.event);
         dispatch(setUpdateListRoom());
@@ -286,7 +296,62 @@ const Chat = () => {
     },
   });
 
+  useSubscription(NEW_USER_AVATAR, {
+    onSubscriptionData(data) {
+      setNewUserAvatar(data.subscriptionData.data.newUserAvatar);
+    },
+  });
+
   //Methods
+  useEffect(() => {
+    if (newUserAvatar) {
+      const newMessagesArray = [];
+      const newUsersArray = [];
+      for (
+        let index = 0;
+        index < dataFromServer.room.messages.length;
+        index++
+      ) {
+        const message = dataFromServer.room.messages[index];
+
+        if (message.user.email === newUserAvatar.email) {
+          newMessagesArray.push({
+            ...message,
+            user: {
+              email: newUserAvatar.email,
+              avatar: newUserAvatar.avatar,
+            },
+          });
+        } else {
+          newMessagesArray.push(message);
+        }
+      }
+
+      for (let index = 0; index < dataFromServer.room.users.length; index++) {
+        const user = dataFromServer.room.users[index];
+
+        if (user.email === newUserAvatar.email) {
+          newUsersArray.push({
+            ...user,
+            avatar: newUserAvatar.avatar,
+          });
+        } else {
+          newUsersArray.push(user);
+        }
+      }
+
+      var room = {
+        room: {
+          ...dataFromServer.room,
+          messages: newMessagesArray,
+          users: newUsersArray,
+        },
+      };
+
+      dispatch(setRoomDetailChatTab(dataFromServer.room.name, room));
+    }
+  }, [newUserAvatar]);
+
   useEffect(() => {
     if (moreMessages) {
       moreMessageData.fetchMore({
@@ -308,27 +373,24 @@ const Chat = () => {
       moreMessages
     ) {
       var room;
+      var messages = moreMessageData.data.room.messages.filter(
+        (message) => message
+      );
 
-      if (moreMessageData.data.room.messages.length === 0) {
+      if (messages.length === 0) {
         room = {
           room: {
             ...dataFromServer.room,
-            getAllMessages: true,
+            getAllMessages: "true",
           },
         };
       } else {
         room = {
           room: {
             ...dataFromServer.room,
-            messages: [
-              ...dataFromServer.room.messages,
-              ...moreMessageData.data.room.messages,
-            ],
-            newMessages: moreMessageData.data.room.messages
-              ? moreMessageData.data.room.messages
-              : [],
-            getAllMessages:
-              moreMessageData.data.room.messages.length < 5 ? true : false,
+            messages: [...dataFromServer.room.messages, ...messages],
+            newMessages: messages ? messages : [],
+            getAllMessages: messages.length < 5 ? "true" : "false",
           },
         };
       }
@@ -428,7 +490,26 @@ const Chat = () => {
     // dispatch(setLoading(loading));
 
     if (!loading && data && !dataFromServer) {
-      dispatch(setRoomDetailChatTab(chosenRoom, data));
+      var numberMessage = data.room.messages.filter(message => message).length;
+      var room;
+
+      if(numberMessage > 4) {
+        room = {
+          room: {
+            ...data.room,
+            getAllMessages: "false",
+          }
+        }
+      } else {
+        room = {
+          room: {
+            ...data.room,
+            getAllMessages: "true",
+          }
+        }
+      }
+      
+      dispatch(setRoomDetailChatTab(chosenRoom, room));
     }
   }, [loading]);
 
@@ -450,6 +531,8 @@ const Chat = () => {
       setCloseChatContentWhenRoomDeleted(true);
 
       closeSlidebar();
+
+      closeChatContent();
 
       dispatch(setDeletedRoom());
     }
@@ -505,7 +588,13 @@ const Chat = () => {
         },
       };
 
-      dispatch(setRoomDetailChatTab(chosenRoom, updatedData));
+      if (localStorage.getItem("createRoom") !== "true") {
+        dispatch(setRoomDetailChatTab(chosenRoom, updatedData));
+      } else {
+        closeSlidebar();
+        setCloseChatContentWhenRoomDeleted(true);
+        localStorage.setItem("createRoom", null);
+      }
     }
   }, [newMessage]);
 
@@ -579,25 +668,27 @@ const Chat = () => {
       <div className="chat_content_container" id="affect">
         <div className="flex">
           <div className="width_100">
-            {chosenRoom !== "" &&
-            dataFromServer &&
-            !closeChatContentWhenRoomDeleted ? (
+            {!closeChatContentWhenRoomDeleted && (
               <>
-                <ChatHeader
-                  openSlidebar={openSlidebar}
-                  closeChatContent={closeChatContent}
-                  roomDetails={dataFromServer.room}
-                />
-                <ChatArea roomDetails={dataFromServer.room} />
-                <ChatInput roomDetails={dataFromServer.room} />
-              </>
-            ) : (
-              <>
-                {chosenRoom !== "" && (
+                {chosenRoom !== "" && dataFromServer ? (
                   <>
-                    <ChatHeader />
-                    <ChatArea />
-                    <ChatInput />
+                    <ChatHeader
+                      openSlidebar={openSlidebar}
+                      closeChatContent={closeChatContent}
+                      roomDetails={dataFromServer.room}
+                    />
+                    <ChatArea roomDetails={dataFromServer.room} />
+                    <ChatInput roomDetails={dataFromServer.room} />
+                  </>
+                ) : (
+                  <>
+                    {chosenRoom !== "" && (
+                      <>
+                        <ChatHeader />
+                        <ChatArea />
+                        <ChatInput />
+                      </>
+                    )}
                   </>
                 )}
               </>

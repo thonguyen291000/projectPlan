@@ -78,12 +78,14 @@ const Update = ({ object, roomDetails, usersOutRoom, closeModal }) => {
       notifySuccess(UPDATE_ROOM_SUCCESS);
 
       if (object === "room") {
-        createMessage({
-          variables: {
-            room: roomDetails.name,
-            content: `I change the room name to ${data.updateRoom.name}`,
-          },
-        });
+        setTimeout(() => {
+          createMessage({
+            variables: {
+              room: data.updateRoom.name,
+              content: `I change the room name to ${data.updateRoom.name.split("|")[0]}`,
+            },
+          });
+        }, 1000);
       }
 
       closeModal();
@@ -154,7 +156,7 @@ const Update = ({ object, roomDetails, usersOutRoom, closeModal }) => {
     updateRoom({
       variables: {
         room: roomDetails.name,
-        name: input_room_name.value,
+        name: input_room_name.value + "|" + roomDetails.rootRoom.name,
         avatar: "",
         description: "",
       },
@@ -175,6 +177,12 @@ const Update = ({ object, roomDetails, usersOutRoom, closeModal }) => {
         event: data,
       },
     });
+  };
+
+  const handleKeyPressName = (e) => {
+    if (e.key === "|") {
+      e.preventDefault();
+    }
   };
 
   if (object === "user") {
@@ -220,8 +228,9 @@ const Update = ({ object, roomDetails, usersOutRoom, closeModal }) => {
             <label htmlFor="group_set_name">New name</label>
             <input
               type="text"
-              placeholder={roomDetails.name}
+              placeholder={roomDetails.name.split("|")[0]}
               id="set_name_room"
+              onKeyPress={handleKeyPressName}
             />
           </div>
           <button type="button" onClick={handleSetName}>

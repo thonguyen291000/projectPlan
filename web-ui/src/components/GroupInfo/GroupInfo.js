@@ -89,7 +89,9 @@ const GroupInfo = ({ closeSlidebar, roomDetails, classFromServer }) => {
       }
 
       for (var i = 0; i < classFromServer.users.length; i++) {
-        usersInClass.push(classFromServer.users[i].email);
+        if (classFromServer.users[i].role !== "staff") {
+          usersInClass.push(classFromServer.users[i].email);
+        }
       }
 
       for (var i = 0; i < usersInClass.length; i++) {
@@ -129,7 +131,7 @@ const GroupInfo = ({ closeSlidebar, roomDetails, classFromServer }) => {
 
   return (
     <div className="group_content">
-      {/* <ReactTooltip /> */}
+      <ReactTooltip />
       <div className="group_content_header">
         <h4>Group Details</h4>
         <div className="float_right_dropdown">
@@ -157,57 +159,59 @@ const GroupInfo = ({ closeSlidebar, roomDetails, classFromServer }) => {
           </button>
         </div>
         <div className="group_session_name">
-          {roomDetails && roomDetails.name}
+          {roomDetails && roomDetails.name.split("|")[0]}
         </div>
         <div className="group_session_state">
           <img src={online} /> Active
         </div>
-        <div className="group_session_action">
-          <Popup
-            trigger={<img src={edit_room_name} data-tip="Set name" />}
-            position="right center"
-            modal
-            nested
-          >
-            {(close) => (
-              <EditGroupsModal
-                type="update_room"
-                closeModal={close}
-                roomDetails={roomDetails}
-              />
-            )}
-          </Popup>
+        {email === roomDetails.whoCreated && (
+          <div className="group_session_action">
+            <Popup
+              trigger={<img src={edit_room_name} data-tip="Set name" />}
+              position="right center"
+              modal
+              nested
+            >
+              {(close) => (
+                <EditGroupsModal
+                  type="update_room"
+                  closeModal={close}
+                  roomDetails={roomDetails}
+                />
+              )}
+            </Popup>
 
-          <Popup
-            trigger={<img src={event} data-tip="Set event" />}
-            position="right center"
-            modal
-            nested
-          >
-            {(close) => (
-              <EditGroupsModal
-                type="room_event"
-                closeModal={close}
-                roomDetails={roomDetails}
-              />
-            )}
-          </Popup>
+            <Popup
+              trigger={<img src={event} data-tip="Set event" />}
+              position="right center"
+              modal
+              nested
+            >
+              {(close) => (
+                <EditGroupsModal
+                  type="room_event"
+                  closeModal={close}
+                  roomDetails={roomDetails}
+                />
+              )}
+            </Popup>
 
-          <Popup
-            trigger={<img src={trash} data-tip="Delete" />}
-            position="right center"
-            modal
-            nested
-          >
-            {(close) => (
-              <EditGroupsModal
-                type="delete"
-                closeModal={close}
-                deleteData={{ target: "room", name: roomDetails.name }}
-              />
-            )}
-          </Popup>
-        </div>
+            <Popup
+              trigger={<img src={trash} data-tip="Delete" />}
+              position="right center"
+              modal
+              nested
+            >
+              {(close) => (
+                <EditGroupsModal
+                  type="delete"
+                  closeModal={close}
+                  deleteData={{ target: "room", name: roomDetails.name }}
+                />
+              )}
+            </Popup>
+          </div>
+        )}
       </div>
 
       <div className="list_members">
@@ -226,7 +230,10 @@ const GroupInfo = ({ closeSlidebar, roomDetails, classFromServer }) => {
                         trigger={
                           <div>
                             <div className="card_content">
-                              <div className="member_avatar">
+                              <div
+                                className="member_avatar"
+                                style={{ width: "auto" }}
+                              >
                                 <img src={add_more} />
                               </div>
                               <div className="content add">
@@ -257,6 +264,7 @@ const GroupInfo = ({ closeSlidebar, roomDetails, classFromServer }) => {
                             <MemberItem
                               member={member}
                               room={roomDetails.name}
+                              owner={roomDetails.whoCreated}
                             />
                           </div>
                         ))}

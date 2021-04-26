@@ -13,6 +13,8 @@ import {
   CProgress,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
+import { css } from "@emotion/core";
+import BarLoader from "react-spinners/BarLoader";
 //Components
 import AdminTableItem from "./AdminTableItem";
 import MainChart from "./MainChart";
@@ -25,10 +27,38 @@ import message from "../../../../assets/icons/message.png";
 import download from "../../../../assets/icons/download.png";
 import user_avatar from "../../../../assets/icons/user_avatar.png";
 //Apollo
-import { gql, useSubscription } from "@apollo/client";
+import { gql, useSubscription, useQuery } from "@apollo/client";
 //Redux
 import { useDispatch } from "react-redux";
 import { setUserOnline } from "../../../../redux/actions/dataAction";
+import { notifyError } from "../../../../utils/toast";
+
+const override = css`
+  display: block;
+  margin: 10px auto;
+  border-color: red;
+`;
+
+const GET_DETAIL_CLASS = gql`
+  query($name: String!) {
+    rootRoom(name: $name) {
+      rooms {
+        name
+        messages {
+          content
+          createdAt
+        }
+        users {
+          email
+          status
+          createdAt
+        }
+        createdAt
+        avatar
+      }
+    }
+  }
+`;
 
 const NEW_USER_ONLINE_ROOM = gql`
   subscription {
@@ -51,22 +81,52 @@ const AdminSession = ({ classDetails }) => {
   //Redux
   const dispatch = useDispatch();
   //Apollo
+  const fetchRoomsData = useQuery(GET_DETAIL_CLASS, {
+    variables: { name: classDetails.name },
+    onCompleted(data) {
+      console.log(data.rootRoom);
+      setRooms(data.rootRoom.rooms);
+    },
+    onError(err) {
+      notifyError(err.message);
+    },
+  });
+
   useSubscription(NEW_USER_ONLINE_ROOM, {
     onSubscriptionData(data) {
       dispatch(setUserOnline(data.subscriptionData.data.newUserOnlineRoom));
     },
   });
 
+  //Variables
+  const [rooms, setRooms] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+
   //Methods
+  React.useEffect(() => {
+    setRooms([]);
+  }, []);
+
+  React.useEffect(() => {
+    setLoading(fetchRoomsData.loading);
+  }, [fetchRoomsData.loading]);
+
   const getNumberOfMessagesAndOnlineRooms = () => {
     var messages = 0;
     var onlineRooms = 0;
-    var rooms = classDetails.rootRoom.rooms;
+
     for (var i = 0; i < rooms.length; i++) {
       messages += rooms[i].messages.length;
 
-      if (rooms[i].status === "online") {
-        onlineRooms += 1;
+      //Check room status
+      const onlineUsers = rooms[i].users.filter(
+        (user) => user.status === "online"
+      );
+
+      if (onlineUsers) {
+        if (onlineUsers.length > 0) {
+          onlineRooms += 1;
+        }
       }
     }
 
@@ -77,7 +137,7 @@ const AdminSession = ({ classDetails }) => {
   };
 
   const numberOfStudents = classDetails.users.length;
-  const numberOfRooms = classDetails.rootRoom.rooms.length;
+  const numberOfRooms = rooms.length;
   const numberOfMessagesAndOnlineRooms = getNumberOfMessagesAndOnlineRooms();
 
   return (
@@ -159,7 +219,18 @@ const AdminSession = ({ classDetails }) => {
                   </CButtonGroup> */}
                 </CCol>
               </CRow>
-              <MainChart classDetails={classDetails} />
+              {loading ? (
+                <div>
+                  <BarLoader
+                    color="#000000"
+                    css={override}
+                    loading={true}
+                    width="100%"
+                  />
+                </div>
+              ) : (
+                <MainChart classDetails={classDetails} rooms={rooms} />
+              )}
             </CCardBody>
           </CCard>
 
@@ -217,7 +288,7 @@ const AdminSession = ({ classDetails }) => {
                     <td>
                       {/* <div className="small text-muted">Last active</div>
                     <strong>10 sec ago</strong> */}
-                      {/* <CBadge color={getBadge(roomStatus)}>{roomStatus}</CBadge>
+            {/* <CBadge color={getBadge(roomStatus)}>{roomStatus}</CBadge>
                     </td>
                   ),
                   "message rate": (item) => (
@@ -247,7 +318,7 @@ const AdminSession = ({ classDetails }) => {
               />
             </CCardBody> */}
             <CCardBody>
-              <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+              <table className="table table-hover table-outline mb-0 d-sm-table">
                 <thead className="thead-light">
                   <tr>
                     <th className="text-center">
@@ -260,18 +331,30 @@ const AdminSession = ({ classDetails }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {classDetails.rootRoom.rooms.map((item, index) => (
-                    <AdminTableItem
-                      index={index}
-                      room={item}
-                      totalMessage={numberOfMessagesAndOnlineRooms.messages}
-                    />
-                  ))}
+                  {!loading && (
+                    <>
+                      {rooms.map((item, index) => (
+                        <AdminTableItem
+                          index={index}
+                          room={item}
+                          totalMessage={numberOfMessagesAndOnlineRooms.messages}
+                        />
+                      ))}
+                    </>
+                  )}
                 </tbody>
               </table>
+              {loading && (
+                <BarLoader
+                  color="#000000"
+                  loading={true}
+                  css={override}
+                  width="100%"
+                />
+              )}
             </CCardBody>
           </CCard>
-          <PieChart classDetails={classDetails} />
+          <PieChart classDetails={classDetails} rooms={rooms} override={override} loading={loading}/>
         </CCardBody>
       </CCard>
     </div>

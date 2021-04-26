@@ -12,20 +12,26 @@ const Room = {
 
   messages: async (room, { offset, limit }) => {
     var messages = room.messages.reverse();
-
-    if (offset) {
-      var indexToSplit = messages.indexOf(offset);
-      var validIds = messages.slice(indexToSplit + 1);
-
-      return await ChatService.getMessagesById({
-        messageIds: validIds,
-        limit,
+    console.log(messages)
+    if (!offset && !limit) {
+      return await ChatService.getMessagesByIdOneTime({
+        messageIds: messages,
       });
     } else {
-      return await ChatService.getMessagesById({
-        messageIds: messages,
-        limit,
-      });
+      if (offset) {
+        var indexToSplit = messages.indexOf(offset);
+        var validIds = messages.slice(indexToSplit + 1);
+
+        return await ChatService.getMessagesById({
+          messageIds: validIds,
+          limit,
+        });
+      } else {
+        return await ChatService.getMessagesById({
+          messageIds: messages,
+          limit,
+        });
+      }
     }
   },
 

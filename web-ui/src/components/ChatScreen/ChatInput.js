@@ -314,6 +314,17 @@ const ChatInput = ({ roomDetails }) => {
   return (
     <div className="chat_input_container">
       <ReactTooltip />
+      {typing && (
+        <>
+          {typing.typing && (
+            <div className="typing">
+              <h6>
+                <i>{typing.user} is typing ...</i>
+              </h6>
+            </div>
+          )}
+        </>
+      )}
       {replyToMessage && (
         <div className="reply_message_container">
           <div className="message">
@@ -355,7 +366,7 @@ const ChatInput = ({ roomDetails }) => {
                 </>
               ) : (
                 <input
-                  placeholder="You can not send message because the group is in a call"
+                  placeholder="Messages are loading..."
                   className="input"
                   id="input_message"
                   autoComplete="off"
@@ -537,17 +548,6 @@ const ChatInput = ({ roomDetails }) => {
           </div>
         </div>
       </form>
-      {typing && (
-        <>
-          {typing.typing && (
-            <div className="typing">
-              <h6>
-                <i>{typing.user} is typing ...</i>
-              </h6>
-            </div>
-          )}
-        </>
-      )}
     </div>
   );
 };

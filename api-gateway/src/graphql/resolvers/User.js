@@ -8,6 +8,8 @@ const User = {
   rooms: async (user, { rootRoom, offset, limit }) => {
     var rooms = user.rooms.reverse();
 
+    rooms = rooms.filter(room => room.includes(`|${rootRoom}`));
+
     if (offset) {
       var indexToSplit = rooms.indexOf(offset);
       var validNames = rooms.slice(indexToSplit + 1);

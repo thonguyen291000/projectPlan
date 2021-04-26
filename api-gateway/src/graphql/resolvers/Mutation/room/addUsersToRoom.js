@@ -27,7 +27,10 @@ const addUsersToRoomResolver = async (
 
     // Notification new joiner real-time
     context.pubsub.publish("NEW_JOIN_ROOM", {
-      newUsersJoinRoom: newRoom
+      newUsersJoinRoom: {
+        ...newRoom,
+        newUsersAdded: users
+      }
     });
 
     return newRoom;

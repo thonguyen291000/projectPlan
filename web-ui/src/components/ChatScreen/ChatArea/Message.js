@@ -354,7 +354,7 @@ const Message = ({
               <img src={userAvatar} />
             </div>
             <div className="message">
-              <div className="message_wrapper">
+              <div className={`message_wrapper ${position !== "left" && "flex_end"}`}>
                 <div className="message_content">
                   {checkReplyToMessageSection()}
                   <p className="time">
@@ -378,7 +378,7 @@ const Message = ({
               <img src={userAvatar} />
             </div>
             <div className="message">
-              <div className="message_wrapper">
+              <div className={`message_wrapper ${position !== "left" && "flex_end"}`}>
                 <div className="message_content">
                   {checkReplyToMessageSection()}
                   <p>File</p>
@@ -430,11 +430,11 @@ const Message = ({
               <img src={userAvatar} />
             </div>
             <div className="message">
-              <div className="message_wrapper">
+              <div className={`message_wrapper ${position !== "left" && "flex_end"}`}>
                 <div className="message_content">
                   {checkReplyToMessageSection()}
                   <p>
-                    <img src={fileUrl} width="400" onClick={openLightBox} />
+                    <img src={fileUrl} width="100%" onClick={openLightBox} />
                     {lightBox && (
                       <Lightbox
                         small={fileUrl}
@@ -464,11 +464,11 @@ const Message = ({
               <img src={userAvatar} />
             </div>
             <div className="message">
-              <div className="message_wrapper">
+              <div className={`message_wrapper ${position !== "left" && "flex_end"}`}>
                 <div className="message_content">
                   {checkReplyToMessageSection()}
                   <p>
-                    <video width="320" height="240" controls>
+                    <video width="100%" height="240" controls>
                       <source src={fileUrl} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>

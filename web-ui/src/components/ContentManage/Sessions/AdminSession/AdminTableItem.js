@@ -73,7 +73,7 @@ const AdminTableItem = ({ room, createdDate, index, totalMessage }) => {
     if (totalMessage === 0) {
       return "0";
     } else {
-      return (room.messages.length / totalMessage).toString();
+      return (room.messages.length / totalMessage * 100).toString();
     }
   };
 
@@ -112,7 +112,7 @@ const AdminTableItem = ({ room, createdDate, index, totalMessage }) => {
         </div>
       </td>
       <td>
-        <div>{roomData?.name}</div>
+        <div>{roomData?.name.split("|")[0]}</div>
         <div className="small text-muted">
           <span>{compareWithNow(roomData?.createdAt) ? "New" : "Old"}</span> |
           Registered: {new Date(`${roomData?.createdAt}`).toDateString()}

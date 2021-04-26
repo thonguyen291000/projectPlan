@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 import Message from "../models/message";
 import Room from "../models/room";
 import File from "../models/file";
@@ -52,6 +54,26 @@ const db_getAllMessages = async (req, res, next) => {
   }
 };
 
+const db_getMessagesByIdOneTime = async (req, res, next) => {
+
+  var messageIds = req.params.messageIds.split(",")
+  var newIds = [];
+  
+  for (let index = 0; index < messageIds.length; index++) {
+    const element = messageIds[index];
+
+    newIds.push(mongoose.Types.ObjectId(element));
+  }
+  
+  try {
+    const result = await Message.find({ _id: { $in: newIds } });
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const db_getMessageById = async (req, res, next) => {
   try {
     const result = await Message.findById(req.params.id);
@@ -101,7 +123,7 @@ const db_updateMessage = async (req, res, next) => {
       message.usersSeenMessage = req.body.usersSeenMessage;
     }
 
-    if(req.body.reacts) {
+    if (req.body.reacts) {
       message.reacts = req.body.reacts;
     }
 
@@ -168,4 +190,5 @@ module.exports = {
   db_updateMessage,
   db_updateFileToMessage,
   db_deleteMessage,
+  db_getMessagesByIdOneTime,
 };

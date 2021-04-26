@@ -20,22 +20,6 @@ const GET_DATA = gql`
       terms {
         name
         classes {
-          rootRoom {
-            rooms {
-              name
-              messages {
-                content
-                createdAt
-              }
-              users {
-                email
-                status
-                createdAt
-              }
-              createdAt
-              avatar
-            }
-          }
           name
           users {
             email

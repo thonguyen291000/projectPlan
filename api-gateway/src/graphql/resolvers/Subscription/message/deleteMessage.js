@@ -1,4 +1,5 @@
 import { withFilter } from "apollo-server";
+import UsersService from "../../../../adapters/usersService";
 import {UNAUTHENTICATED} from "../../../../const/errors"
 
 const deleteMessageResolver = {
@@ -6,11 +7,14 @@ const deleteMessageResolver = {
     (_, __, {pubsub}) => {
       return pubsub.asyncIterator(["DELETE_MESSAGE"]);
     },
-    ({ deleteMessage }, _, {user}) => {
+    async ({ deleteMessage }, _, {user}) => {
       if(!user) throw new Error(UNAUTHENTICATED);
+
+      const userObj = await UsersService.getUserByEmail({email: user.email});
+
       if (
         deleteMessage.user === user.email ||
-        user.rooms.indexOf(deleteMessage.room) !== -1
+        userObj.rooms.indexOf(deleteMessage.room) !== -1
       )
         return true;
       return false;

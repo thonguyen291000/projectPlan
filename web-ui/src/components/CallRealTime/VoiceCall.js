@@ -34,12 +34,13 @@ const OUT_ROOM = gql`
 `;
 
 const peers = {};
+var numberUser = [];
 
 const myVideo = document.createElement("video");
 myVideo.controls = true;
 myVideo.id = "own";
 
-const CallVideo = ({ roomName }) => {
+const VoiceCall = ({ roomName, close }) => {
   //Apollo
   const [userJoinRoom, props] = useMutation(USER_JOIN_ROOM, {
     onError(err) {
@@ -69,9 +70,8 @@ const CallVideo = ({ roomName }) => {
       try {
         const userId = data.subscriptionData.data.outRoom.userId;
         console.log("User out room", userId);
-        const videoGrid = document.getElementById("video-grid");
-        const oldVideo = document.getElementById(userId);
-        videoGrid.removeChild(oldVideo);
+        
+        numberUser.shift();
 
         if (peers[userId]) peers[userId].close();
 
@@ -144,6 +144,9 @@ const CallVideo = ({ roomName }) => {
             call.on("stream", (userVideoStream) => {
               console.log("on stream on call", userVideoStream);
               addVideoStream(video, userVideoStream);
+              if (numberUser.indexOf(userVideoStream.id) === -1) {
+                numberUser.push(userVideoStream.id);
+              }
               calUsersJoin();
             });
           });
@@ -161,6 +164,9 @@ const CallVideo = ({ roomName }) => {
     call.on("stream", (userVideoStream) => {
       console.log("on stream call");
       addVideoStream(video, userVideoStream);
+      if (numberUser.indexOf(userVideoStream.id) === -1) {
+        numberUser.push(userVideoStream.id);
+      }
       calUsersJoin();
     });
     call.on("close", () => {
@@ -206,9 +212,12 @@ const CallVideo = ({ roomName }) => {
     <div className="video_container">
       <div className="class_name">{roomName}</div>
       <div className="amount">{numberOfUser} Joined</div>
+      <div className="stop_call">
+        <button onClick={() => close()}>Stop call</button>
+      </div>
       <div id="video-grid"></div>
     </div>
   );
 };
 
-export default CallVideo;
+export default VoiceCall;

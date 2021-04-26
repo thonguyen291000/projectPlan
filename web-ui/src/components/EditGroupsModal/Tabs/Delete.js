@@ -9,6 +9,7 @@ import {
   setLoading,
   setDeletedUser,
   setDeletedRoom,
+  setRoomDetailChatTab,
 } from "../../../redux/actions/dataAction";
 //Const
 import {
@@ -50,6 +51,8 @@ const Delete = ({ deleteData, closeModal }) => {
       notifySuccess(data.deleteRoom);
 
       dispatch(setDeletedRoom(deleteData.name));
+
+      dispatch(setRoomDetailChatTab(deleteData.name, null));
 
       closeModal();
     },

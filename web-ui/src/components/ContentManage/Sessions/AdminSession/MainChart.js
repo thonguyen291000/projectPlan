@@ -9,23 +9,24 @@ const brandInfo = getStyle("info") || "#20a8d8";
 
 const MainChart = (attributes) => {
   const classDetails = attributes.classDetails;
+  const rooms = attributes.rooms;
 
   const filterMessageBasedDate = () => {
     const dateArray = [];
     const messageArray = {};
     //Filter date
-    for (var i = 0; i < classDetails.rootRoom.rooms.length; i++) {
-      for (var j = 0; j < classDetails.rootRoom.rooms[i].messages.length; j++) {
+    for (var i = 0; i < rooms?.length; i++) {
+      for (var j = 0; j < rooms[i].messages.length; j++) {
         if (
           dateArray.indexOf(
             new Date(
-              classDetails.rootRoom.rooms[i].messages[j].createdAt
+              rooms[i].messages[j].createdAt
             ).toDateString()
           ) === -1
         ) {
           dateArray.push(
             new Date(
-              classDetails.rootRoom.rooms[i].messages[j].createdAt
+              rooms[i].messages[j].createdAt
             ).toDateString()
           );
         }
@@ -33,19 +34,19 @@ const MainChart = (attributes) => {
     }
 
     //Filter message
-    for (var i = 0; i < classDetails.rootRoom.rooms.length; i++) {
+    for (var i = 0; i < rooms.length; i++) {
       for (var j = 0; j < dateArray.length; j++) {
         if (!messageArray[`${dateArray[j]}`]) {
           messageArray[`${dateArray[j]}`] = 0;
         }
         for (
           var k = 0;
-          k < classDetails.rootRoom.rooms[i].messages.length;
+          k < rooms[i].messages.length;
           k++
         ) {
           if (
             compareTwoDate(
-              classDetails.rootRoom.rooms[i].messages[k].createdAt,
+              rooms[i].messages[k].createdAt,
               dateArray[j]
             )
           ) {

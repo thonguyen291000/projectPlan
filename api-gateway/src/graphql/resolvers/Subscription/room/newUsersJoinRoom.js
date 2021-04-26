@@ -6,8 +6,9 @@ const newUsersJoinRoomResolver = {
     (_, __, {pubsub}) => {
       return pubsub.asyncIterator(["NEW_JOIN_ROOM"]);
     },
-    ({ newUsersJoinRoom }, _, {user}) => {
+    ({ newUsersJoinRoom }, _, {user, newRooms}) => {
       if(!user) throw new Error(UNAUTHENTICATED);
+
       if (
         newUsersJoinRoom.users.indexOf(user.email) !== -1
       )

@@ -238,8 +238,6 @@ const ChatTab = ({ openChatContent }) => {
       offset: moreRooms?.offset,
     },
     skip: classShowCollapse || moreRooms ? false : true,
-    fetchPolicy: "no-cache",
-    nextFetchPolicy: "no-cache",
     onError(err) {
       notifyError(err.message);
     },
@@ -286,7 +284,7 @@ const ChatTab = ({ openChatContent }) => {
     onSubscriptionData({ subscriptionData }) {
       const room = subscriptionData.data.updateRoom;
 
-      if (room.event) {
+      if (room.name === room.oldName) {
         setNewEvent(room);
       } else {
         setNewRoomNameData(room);
@@ -652,16 +650,18 @@ const ChatTab = ({ openChatContent }) => {
         if (data.user.rooms) {
           for (let index = 0; index < data.user.rooms.length; index++) {
             const element = data.user.rooms[index];
-            if (element && element?.newestMessage) {
-              newRoomArray.push({
-                ...element,
-                messages: [element.newestMessage],
-              });
-            } else {
-              newRoomArray.push({
-                ...element,
-                messages: [],
-              });
+            if (element) {
+              if (element.newestMessage) {
+                newRoomArray.push({
+                  ...element,
+                  messages: [element.newestMessage],
+                });
+              } else {
+                newRoomArray.push({
+                  ...element,
+                  messages: [],
+                });
+              }
             }
           }
 
@@ -669,8 +669,8 @@ const ChatTab = ({ openChatContent }) => {
             _id: dataFromServer.user._id,
             classes: dataFromServer.user.classes,
             seenRooms: dataFromServer.user.seenRooms,
-            rooms: newRoomArray,
-            initialRooms: data.user.rooms,
+            rooms: [...dataFromServer.user.rooms, ...newRoomArray],
+            initialRooms: data.user.rooms.filter((room) => room),
           };
 
           dispatch(setClassesInChatTab({ user: formatedData }));
@@ -699,8 +699,6 @@ const ChatTab = ({ openChatContent }) => {
                   messages: [],
                 });
               }
-            } else {
-              break;
             }
           }
 
@@ -712,14 +710,14 @@ const ChatTab = ({ openChatContent }) => {
               classes: dataFromServer.user.classes,
               seenRooms: dataFromServer.user.seenRooms,
               rooms: [...dataFromServer.user.rooms, ...newRoomArray],
-              newGroups: getRoomsInClass.data.user.rooms,
-              initialRooms: data.user.rooms,
+              newGroups: data.user.rooms.filter((room) => room),
+              initialRooms: data.user.rooms.filter((room) => room),
             };
           } else {
             formatedData = {
               ...dataFromServer.user,
               newGroups: [],
-              initialRooms: data.user.rooms,
+              initialRooms: data.user.rooms.filter((room) => room),
             };
           }
           dispatch(setClassesInChatTab({ user: formatedData }));
@@ -759,117 +757,121 @@ const ChatTab = ({ openChatContent }) => {
   useEffect(() => {
     //Rearrange data
     if (dataFromServer) {
-      var classes = [];
+      try {
+        var classes = [];
 
-      for (var i = 0; i < dataFromServer?.user.classes.length; i++) {
-        classes.push({
-          name: dataFromServer?.user.classes[i].name,
-          rooms: [],
-        });
-      }
+        for (var i = 0; i < dataFromServer?.user.classes.length; i++) {
+          classes.push({
+            name: dataFromServer?.user.classes[i].name,
+            rooms: [],
+          });
+        }
 
-      for (var i = 0; i < dataFromServer?.user.rooms.length; i++) {
-        for (var j = 0; j < classes.length; j++) {
-          if (
-            dataFromServer?.user.rooms[i].rootRoom?.name === classes[j]?.name
-          ) {
-            classes[j].rooms.push({
-              ...dataFromServer?.user.rooms[i],
-            });
-            break;
+        for (var i = 0; i < dataFromServer?.user.rooms.length; i++) {
+          for (var j = 0; j < classes.length; j++) {
+            if (
+              dataFromServer?.user.rooms[i].rootRoom?.name === classes[j]?.name
+            ) {
+              classes[j].rooms.push({
+                ...dataFromServer?.user.rooms[i],
+              });
+              break;
+            }
           }
         }
-      }
 
-      //Check room is seen or not in each class
-      for (var i = 0; i < classes.length; i++) {
-        for (var j = 0; j < classes[i].rooms.length; j++) {
-          if (
-            dataFromServer?.user.seenRooms?.indexOf(
-              classes[i].rooms[j]?.name
-            ) !== -1
-          ) {
-            classes[i].rooms[j].seen = true;
-          } else {
-            classes[i].rooms[j].seen = false;
-          }
-
-          //Check message is seen or not in each room
-          for (var k = 0; k < classes[i].rooms[j].messages.length; k++) {
+        //Check room is seen or not in each class
+        for (var i = 0; i < classes.length; i++) {
+          for (var j = 0; j < classes[i].rooms.length; j++) {
             if (
-              classes[i].rooms[j].messages[k].usersSeenMessage?.indexOf(
-                email
-              ) === -1
+              dataFromServer?.user.seenRooms?.indexOf(
+                classes[i].rooms[j]?.name
+              ) !== -1
             ) {
-              if (!classes[i].rooms[j].unreadMessages) {
-                classes[i].rooms[j].unreadMessages = 1;
-              }
+              classes[i].rooms[j].seen = true;
+            } else {
+              classes[i].rooms[j].seen = false;
+            }
 
-              if (classes[i].unreadMessages) {
-                classes[i].unreadMessages += 1;
-              } else {
-                classes[i].unreadMessages = 1;
+            //Check message is seen or not in each room
+            for (var k = 0; k < classes[i].rooms[j].messages.length; k++) {
+              if (
+                classes[i].rooms[j].messages[k].usersSeenMessage?.indexOf(
+                  email
+                ) === -1
+              ) {
+                if (!classes[i].rooms[j].unreadMessages) {
+                  classes[i].rooms[j].unreadMessages = 1;
+                }
+
+                if (classes[i].unreadMessages) {
+                  classes[i].unreadMessages += 1;
+                } else {
+                  classes[i].unreadMessages = 1;
+                }
               }
             }
           }
         }
-      }
 
-      //Check message is seen or not in each room
+        //Check message is seen or not in each room
 
-      //Sort rooms depended on newest message
-      for (var i = 0; i < classes.length; i++) {
-        var roomsHaveMessage = [];
-        var roomsNoMessage = [];
+        //Sort rooms depended on newest message
+        for (var i = 0; i < classes.length; i++) {
+          var roomsHaveMessage = [];
+          var roomsNoMessage = [];
 
-        for (var j = 0; j < classes[i].rooms.length; j++) {
-          if (classes[i].rooms[j].messages.length === 0) {
-            roomsNoMessage.push(classes[i].rooms[j]);
-          } else {
-            roomsHaveMessage.push(classes[i].rooms[j]);
+          for (var j = 0; j < classes[i].rooms.length; j++) {
+            if (classes[i].rooms[j].messages.length === 0) {
+              roomsNoMessage.push(classes[i].rooms[j]);
+            } else {
+              roomsHaveMessage.push(classes[i].rooms[j]);
+            }
           }
+
+          roomsHaveMessage.sort((firstRoom, secondRoom) =>
+            firstRoom.messages[0]._id < secondRoom.messages[0]._id ? 1 : -1
+          );
+
+          roomsNoMessage.sort((firstRoom, secondRoom) =>
+            firstRoom.createdAt < secondRoom.createdAt ? 1 : -1
+          );
+
+          classes[i].rooms = roomsHaveMessage.concat(roomsNoMessage);
         }
 
-        roomsHaveMessage.sort((firstRoom, secondRoom) =>
-          firstRoom.messages[0]._id < secondRoom.messages[0]._id ? 1 : -1
-        );
+        //Get file for profile tab
+        const files = [];
 
-        roomsNoMessage.sort((firstRoom, secondRoom) =>
-          firstRoom.createdAt < secondRoom.createdAt ? 1 : -1
-        );
-
-        classes[i].rooms = roomsHaveMessage.concat(roomsNoMessage);
-      }
-
-      //Get file for profile tab
-      const files = [];
-
-      for (var i = 0; i < dataFromServer?.user.rooms.length; i++) {
-        for (
-          var j = 0;
-          j < dataFromServer?.user.rooms[i]?.messages.length;
-          j++
-        ) {
-          if (
-            dataFromServer?.user.rooms[i].messages[j].url &&
-            dataFromServer?.user.rooms[i].messages[j].url !== "" &&
-            dataFromServer?.user.rooms[i].messages[j].user.email === email
+        for (var i = 0; i < dataFromServer?.user.rooms.length; i++) {
+          for (
+            var j = 0;
+            j < dataFromServer?.user.rooms[i]?.messages.length;
+            j++
           ) {
-            files.push({
-              filename: dataFromServer?.user.rooms[i].messages[j].filename,
-              type: dataFromServer?.user.rooms[i].messages[j].type,
-              url: dataFromServer?.user.rooms[i].messages[j].url,
-              size: dataFromServer?.user.rooms[i].messages[j].size
-                ? dataFromServer?.user.rooms[i].messages[j].size
-                : 0,
-            });
+            if (
+              dataFromServer?.user.rooms[i].messages[j].url &&
+              dataFromServer?.user.rooms[i].messages[j].url !== "" &&
+              dataFromServer?.user.rooms[i].messages[j].user.email === email
+            ) {
+              files.push({
+                filename: dataFromServer?.user.rooms[i].messages[j].filename,
+                type: dataFromServer?.user.rooms[i].messages[j].type,
+                url: dataFromServer?.user.rooms[i].messages[j].url,
+                size: dataFromServer?.user.rooms[i].messages[j].size
+                  ? dataFromServer?.user.rooms[i].messages[j].size
+                  : 0,
+              });
+            }
           }
         }
+        dispatch(setFilesProfileTab(files));
+        dispatch(setUpdateListRoom(true));
+        dispatch(setClassesInChatTab(classes));
+        setClasses(classes);
+      } catch (err) {
+        notifyError(err.message);
       }
-      dispatch(setFilesProfileTab(files));
-      dispatch(setUpdateListRoom(true));
-      dispatch(setClassesInChatTab(classes));
-      setClasses(classes);
     }
   }, [dataFromServer]);
 

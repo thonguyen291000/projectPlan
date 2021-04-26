@@ -2,18 +2,19 @@ import React from "react";
 //Library
 import { CCard, CCardBody, CCardHeader } from "@coreui/react";
 import { CChartPie } from "@coreui/react-chartjs";
+import BarLoader from "react-spinners/BarLoader";
 
-const PieChart = ({ classDetails }) => {
+const PieChart = ({ classDetails, rooms, override, loading }) => {
   const getClassNamesWithMessage = () => {
-    const rooms = [];
+    const newRooms = [];
     const messages = [];
-    for (var i = 0; i < classDetails.rootRoom.rooms.length; i++) {
-      rooms.push(classDetails.rootRoom.rooms[i].name);
-      messages.push(classDetails.rootRoom.rooms[i].messages.length);
+    for (var i = 0; i < rooms.length; i++) {
+      newRooms.push(rooms[i].name.split("|")[0]);
+      messages.push(rooms[i].messages.length);
     }
 
     return {
-      rooms,
+      rooms: newRooms,
       messages,
     };
   };
@@ -42,20 +43,29 @@ const PieChart = ({ classDetails }) => {
         </h4>
       </CCardHeader>
       <CCardBody>
-        <CChartPie
-          datasets={[
-            {
-              backgroundColor: generateRandomColor(),
-              data: classNameWithmessage.messages,
-            },
-          ]}
-          labels={classNameWithmessage.rooms}
-          options={{
-            tooltips: {
-              enabled: true,
-            },
-          }}
-        />
+        {loading ? (
+          <BarLoader
+            color="#000000"
+            loading={true}
+            css={override}
+            width="100%"
+          />
+        ) : (
+          <CChartPie
+            datasets={[
+              {
+                backgroundColor: generateRandomColor(),
+                data: classNameWithmessage.messages,
+              },
+            ]}
+            labels={classNameWithmessage.rooms}
+            options={{
+              tooltips: {
+                enabled: true,
+              },
+            }}
+          />
+        )}
       </CCardBody>
     </CCard>
   );

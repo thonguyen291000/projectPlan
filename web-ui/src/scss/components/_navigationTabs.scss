@@ -43,11 +43,25 @@
   .tabs_navigation_container {
     flex-direction: row;
     justify-content: center;
+    overflow: scroll;
+    
     & .ul_tabs {
       display: flex;
 
       & .li_tab {
         margin: 0 5vw;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .tabs_navigation_container {
+
+    & .ul_tabs {
+
+      & .li_tab {
+        margin: 0 auto;
       }
     }
   }

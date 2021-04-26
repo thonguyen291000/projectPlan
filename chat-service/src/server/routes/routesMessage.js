@@ -11,6 +11,10 @@ const routesMessage = (app, functions) => {
     await functions.getAllMessages(req, res, next);
   });
 
+  app.get("/messages/id/:messageIds", async (req, res, next) => {
+    await functions.getMessagesByIdOneTime(req, res, next);
+  });
+
   app.get("/message/:id", async (req, res, next) => {
     await functions.getMessageById(req, res, next);
   });

@@ -1,0 +1,7 @@
+{
+    "name": "chat_greenwich",
+    "integrations": {
+      "capacitor": {}
+    },
+    "type": "react"
+  }

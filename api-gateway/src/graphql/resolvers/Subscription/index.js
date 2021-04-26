@@ -13,3 +13,4 @@ export { default as removeUsersFromRoom } from "./room/removeUsersFromRoom";
 export { default as userOnline } from "./user/userOnline";
 export { default as userOffline } from "./user/userOffline";
 export { default as updateRoom } from "./room/updateRoom";
+export { default as newUserAvatar } from "./user/newUserAvatar";

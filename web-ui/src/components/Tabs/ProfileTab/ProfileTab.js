@@ -13,6 +13,8 @@ import online from "../../../assets/icons/online.png";
 import UploadedFile from "./UploadedFile";
 //Redux
 import { useSelector } from "react-redux";
+//Logic 
+import {UpperFirstLetter} from "../../../funcs/upperFirstLetter"
 
 const files = [
   {
@@ -39,6 +41,7 @@ const ProfileTab = ({ closeSlidebar }) => {
       name: state.user.info.name,
       email: state.user.info.email,
       avatar: state.user.info.avatar,
+      role: state.user.info.role,
     };
   });
   const files = useSelector((state) => state.data.files);
@@ -145,6 +148,10 @@ const ProfileTab = ({ closeSlidebar }) => {
                 <div>
                   <p>Email</p>
                   <h5>{user.email}</h5>
+                </div>
+                <div>
+                  <p>Role</p>
+                  <h5>{UpperFirstLetter(user.role)}</h5>
                 </div>
               </div>
             </div>

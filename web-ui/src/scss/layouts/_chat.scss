@@ -8,6 +8,7 @@
 
   & .chat_info_container {
     min-width: 320px;
+    width: 35vw;
     // min-height: 100%;
     display: grid;
     grid-template-columns: 2fr 10fr;
@@ -118,7 +119,7 @@
 
       & .sidebar {
         z-index: 1;
-        max-height: 650px;
+        max-height: 100vh;
         border-left: 4px solid $solitude;
         overflow: hidden;
         background-color: #fff;

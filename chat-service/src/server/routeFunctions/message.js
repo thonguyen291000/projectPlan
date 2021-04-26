@@ -8,6 +8,7 @@ import {
   db_updateMessage,
   db_updateFileToMessage,
   db_deleteMessage,
+  db_getMessagesByIdOneTime,
 } from "../../db/functions/message";
 
 import {
@@ -60,6 +61,10 @@ const getMessgesForARoom = async (req, res, next) => {
 const getAllMessages = async (req, res, next) => {
   await db_getAllMessages(req, res, next);
 };
+
+const getMessagesByIdOneTime = async (req, res, next) => {
+  await db_getMessagesByIdOneTime(req, res, next);
+}
 
 const getMessageById = async (req, res, next) => {
   if (req.params.id === "") {
@@ -117,4 +122,5 @@ module.exports = {
   updateMessage,
   updateFileToMessage,
   deleteMessage,
+  getMessagesByIdOneTime
 };

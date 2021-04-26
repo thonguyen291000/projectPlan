@@ -19,6 +19,13 @@ const deleteRoomResolver = async (obj, { name, whoDeleted }, context) => {
     else console.log(); // deleted
   });
 
+  context.pubsub.publish("REMOVE_USERS_FROM_ROOM", {
+    removeUsersFromRoom: {
+      users : [whoDeleted],
+      room: name,
+    },
+  });
+
   return result;
 };
 

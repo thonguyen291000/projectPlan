@@ -26,6 +26,7 @@ const ChatArea = ({ roomDetails }) => {
   const messagesEndRef = useRef(null);
   //Variables
   const [messages, setMessages] = useState();
+
   //Methods
 
   // useEffect(() => {
@@ -140,9 +141,9 @@ const ChatArea = ({ roomDetails }) => {
             <div className="content_wrapper">
               <div className="content">
                 <ul className="list_conversation">
-                  {messages ? (
+                  {roomDetails ? (
                     <>
-                      {!roomDetails?.getAllMessages && (
+                      {roomDetails?.getAllMessages === "false" && (
                         <li className="btn_view_more">
                           <hr />
                           <button type="button" onClick={handleViewMore}>
@@ -150,7 +151,7 @@ const ChatArea = ({ roomDetails }) => {
                           </button>
                         </li>
                       )}
-                      {messages.map((message, index) => (
+                      {messages && messages.map((message, index) => (
                         <li
                           key={index}
                           className={
