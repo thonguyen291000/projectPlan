@@ -73,7 +73,7 @@ const AdminTableItem = ({ room, createdDate, index, totalMessage }) => {
     if (totalMessage === 0) {
       return "0";
     } else {
-      return (room.messages.length / totalMessage * 100).toString();
+      return Math.round((room.messages.length / totalMessage) * 100).toString();
     }
   };
 
