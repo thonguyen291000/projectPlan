@@ -47,7 +47,9 @@ Here are some technical requirments that you must have to run the app successful
   ```
   - Finally, you go to [the link](http://localhost:3000) to load the application. 
  ###### The mobile application
-  - Firstly, you open the Android Studio editor.
-  - Secondly, you open the folder named app_version_android in the editor.
+  - To run the application as a mobile app, in the Git CLI, you are at the web-ui folder and type this statement:
+  ```
+  npx cap open android
+  ```
   - Then, you open the Genymotion and operate a virtual android device or use Android Studio's virtual devices or use a real android device.
   - Finally, you click on the Start button to set up the application.
