@@ -298,6 +298,7 @@ const Create = ({ className, closeModal }) => {
             id="avatar"
             className="avatar"
             onChange={handleAvatar}
+            style={{width: "100%"}}
           />
         </div>
         <button type="button" onClick={handleCreate}>

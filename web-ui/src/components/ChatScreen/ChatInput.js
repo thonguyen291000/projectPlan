@@ -344,7 +344,7 @@ const ChatInput = ({ roomDetails }) => {
             <div>
               {roomDetails ? (
                 <>
-                  {isCallingVideo ? (
+                  {/* {isCallingVideo ? (
                     <input
                       placeholder="You can not send message because the group is in a call"
                       className="input"
@@ -352,7 +352,7 @@ const ChatInput = ({ roomDetails }) => {
                       autoComplete="off"
                       disabled
                     />
-                  ) : (
+                  ) : ( */}
                     <input
                       placeholder="Enter message..."
                       className="input"
@@ -362,7 +362,7 @@ const ChatInput = ({ roomDetails }) => {
                       onFocus={handleTyping}
                       onBlur={handleHideTyping}
                     />
-                  )}
+                  {/* )} */}
                 </>
               ) : (
                 <input
@@ -382,7 +382,7 @@ const ChatInput = ({ roomDetails }) => {
                   <label data-tip="Gif">
                     {roomDetails ? (
                       <>
-                        {!isCallingVideo ? (
+                        {/* {!isCallingVideo ? ( */}
                           <Popup
                             trigger={<img src={gif} className="attach_icon" />}
                             position="center"
@@ -412,9 +412,9 @@ const ChatInput = ({ roomDetails }) => {
                               />
                             )}
                           </Popup>
-                        ) : (
-                          <img src={gif} className="attach_icon" disabled />
-                        )}
+                        {/* // ) : (
+                        //   <img src={gif} className="attach_icon" disabled />
+                        // )} */}
                       </>
                     ) : (
                       <img src={gif} className="attach_icon" disabled />
@@ -425,18 +425,18 @@ const ChatInput = ({ roomDetails }) => {
                   <div data-tip="Emoji" className="emoji">
                     {roomDetails ? (
                       <>
-                        {isCallingVideo ? (
+                        {/* {isCallingVideo ? (
                           <button type="button" disabled>
                             <img src={smile} className="smile_icon" />
                           </button>
-                        ) : (
+                        ) : ( */}
                           <button
                             type="button"
                             onClick={handleOpenDropdownMenu}
                           >
                             <img src={smile} className="smile_icon" />
                           </button>
-                        )}
+                        {/* )} */}
                       </>
                     ) : (
                       <button type="button" disabled>
@@ -467,7 +467,7 @@ const ChatInput = ({ roomDetails }) => {
                     <img src={attach_purple} className="attach_icon" />
                     {roomDetails ? (
                       <>
-                        {isCallingVideo ? (
+                        {/* {isCallingVideo ? (
                           <input
                             type="file"
                             className="file_input"
@@ -475,14 +475,14 @@ const ChatInput = ({ roomDetails }) => {
                             onChange={handleChangeUpload}
                             disabled
                           />
-                        ) : (
+                        ) : ( */}
                           <input
                             type="file"
                             className="file_input"
                             name="file_input"
                             onChange={handleChangeUpload}
                           />
-                        )}
+                        {/* )} */}
                       </>
                     ) : (
                       <input
@@ -500,7 +500,7 @@ const ChatInput = ({ roomDetails }) => {
                     <img src={image_purple} className="image_icon" />
                     {roomDetails ? (
                       <>
-                        {isCallingVideo ? (
+                        {/* {isCallingVideo ? (
                           <input
                             accept="image/*"
                             name="fileInput"
@@ -510,7 +510,7 @@ const ChatInput = ({ roomDetails }) => {
                             onChange={handleChangeUpload}
                             disabled
                           />
-                        ) : (
+                        ) : ( */}
                           <input
                             accept="image/*"
                             name="fileInput"
@@ -519,7 +519,7 @@ const ChatInput = ({ roomDetails }) => {
                             className="file_input"
                             onChange={handleChangeUpload}
                           />
-                        )}
+                        {/* )} */}
                       </>
                     ) : (
                       <input

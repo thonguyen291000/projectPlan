@@ -231,6 +231,7 @@ const Update = ({ object, roomDetails, usersOutRoom, closeModal }) => {
               placeholder={roomDetails.name.split("|")[0]}
               id="set_name_room"
               onKeyPress={handleKeyPressName}
+              style={{width: "100%"}}
             />
           </div>
           <button type="button" onClick={handleSetName}>
@@ -259,6 +260,7 @@ const Update = ({ object, roomDetails, usersOutRoom, closeModal }) => {
                   : "Event name"
               }
               id="set_name_event"
+              style={{width: "100%"}}
             />
           </div>
           <div className="group_set_time">
@@ -268,6 +270,7 @@ const Update = ({ object, roomDetails, usersOutRoom, closeModal }) => {
               onChange={(date) => setDate(date)}
               showTimeSelect
               dateFormat="Pp"
+              className="date_picker"
             />
           </div>
           <button type="button" onClick={handleSetEvent}>

@@ -317,7 +317,7 @@ const AdminSession = ({ classDetails }) => {
                 }}
               />
             </CCardBody> */}
-            <CCardBody>
+            <CCardBody style={{overflow: "scroll"}}>
               <table className="table table-hover table-outline mb-0 d-sm-table">
                 <thead className="thead-light">
                   <tr>

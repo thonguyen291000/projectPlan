@@ -98,6 +98,10 @@
             & > label {
               margin-right: 20px;
             }
+
+            & .date_picker {
+              width: 100%;
+            }
           }
 
           & .group_set_name {
@@ -198,6 +202,10 @@
 
     & .tab_content_update {
       & form {
+        & .group_set_time {
+          display: block !important;
+        }
+        
         & .group_members {
           display: block !important;
         }
