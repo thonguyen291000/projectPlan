@@ -106,7 +106,7 @@ const Create = ({ className, closeModal }) => {
 
   const [createMessage, createMessageProps] = useMutation(CREATE_MESSAGE, {
     onCompleted(data) {
-      notifySuccess(CREATE_MESSAGE_SUCCESS);
+
     },
     onError(err) {
       notifyError(err.message);
@@ -192,7 +192,7 @@ const Create = ({ className, closeModal }) => {
     const owner = document.getElementById("group_owner").value.trim();
 
     if (listStudents && new_name && newRoom?.avatar) {
-      const userInGroup = [email];
+      var userInGroup = [email];
 
       var arrayUsersInput = list_students.split(" ");
 
@@ -202,6 +202,9 @@ const Create = ({ className, closeModal }) => {
           userInGroup.push(arrayUsersInput[i]);
         }
       }
+
+      userInGroup = userInGroup.filter((item) => item !== "(Teacher)");
+
       if (role === "student" && userInGroup.length > 2) {
         notifyError(STUDENT_NOT_SOCIAL_ROOM);
       } else {
@@ -298,7 +301,7 @@ const Create = ({ className, closeModal }) => {
             id="avatar"
             className="avatar"
             onChange={handleAvatar}
-            style={{width: "100%"}}
+            style={{ width: "100%" }}
           />
         </div>
         <button type="button" onClick={handleCreate}>
